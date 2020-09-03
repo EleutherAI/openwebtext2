@@ -6,10 +6,10 @@ PushShift provides dumps of all reddit posts and submissions, but they are norma
 
 If we require the most recent reddit posts for any reason another project will be required to create a live scraping tool as even the PushShift API is not reliable for recent data.
 
-**Acknowledgements**
+**Acknowledgements**  
 Much of this code was written by @hohohoho (researcher2 on github), with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/
 
-**Environment Setup**
+**Environment Setup**  
 Tested in a basic conda environment, though conda probably isn't necessary.
 
 ```conda create --name pushshift_dump_processing" python=3.8```
