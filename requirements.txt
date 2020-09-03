@@ -1,0 +1,8 @@
+zstandard
+requests
+python-dateutil
+tqdm
+tldextract
+beautifulsoup4
+newspaper3k
+htmlmin
