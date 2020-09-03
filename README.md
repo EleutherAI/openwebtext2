@@ -9,11 +9,22 @@ If we require the most recent reddit posts for any reason another project will b
 **Acknowledgements**
 Much of this code was written by @hohohoho (researcher2 on github), with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/
 
+**Environment Setup**
+Tested in a basic conda environment, though conda probably isn't necessary.
+
+```conda create --name pushshift_dump_processing" python=3.8```
+
+All requirements can be installed with: 
+
+```pip install -r requirements.txt```
+
 There are three parts in this pipeline so far:
 
 1. Download the compressed pushshift dumps
 2. Process the downloaded dump files
 3. Scrape the URLs sourced from step 2
+
+
 
 ## Part 1 - Downloading Compressed Dump Files
 
