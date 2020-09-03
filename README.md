@@ -12,7 +12,7 @@ Much of this code was written by @hohohoho (researcher2 on github), with inspira
 **Environment Setup**  
 Tested in a basic conda environment, though conda probably isn't necessary.
 
-```conda create --name pushshift_dump_processing" python=3.8```
+```conda create --name pushshift_dump_processing python=3.8```
 
 All requirements can be installed with: 
 
