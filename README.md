@@ -81,7 +81,7 @@ If you want to filter the urls before scraping we have left an example filter in
 
 NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed
 
-The following example will scrape all URLs found in file found at *output/RS_2020-04.urls.txt*.
+The following example will scrape all URLs found in file found at *output/RS_2011-01.urls.txt*.
 
 ```python
 if __name__ == "__main__":
