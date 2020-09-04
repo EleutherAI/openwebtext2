@@ -107,7 +107,9 @@ def verify_dumps(start_date, end_date, download_directory):
             file_path = os.path.join(download_directory, file_name)
             if os.path.exists(file_path):
                 calculated_hash = calculate_file_sha256sum(file_path)
-                if calculated_hash != sha256sum_lookup[file_name]:
+                if file_name not in sha256sum_lookup:
+                    logger.info(f"No sha256 found for {file_path}")
+                elif calculated_hash != sha256sum_lookup[file_name]:
                     bad_hash.append(file_name)
                     logger.info(f"sha256 doesn't match for file {file_path}")
                 else:
