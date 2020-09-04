@@ -13,6 +13,8 @@ logger = logging.getLogger()
 
 million = math.pow(10, 6)
 
+possible_archive_formats = ["zst", "xz", "bz2"]
+
 def calculate_file_sha256sum(file_path):
     sha256_hash = hashlib.sha256()
 
@@ -55,7 +57,6 @@ def download_pushshift_dumps(start_date, end_date, download_directory):
 
     # First available file: RS_2011-01.bz2
     base_url = "https://files.pushshift.io/reddit/submissions/"
-    possible_archive_formats = ["bz2", "xz", "zst"]
 
     date = start_date
     while date <= end_date:
@@ -90,44 +91,56 @@ def get_sha256sums(download_directory):
     return sha256sum_lookup
 
 
+# We do this at the end to make code cleaner and allow separate verification
 def verify_dumps(start_date, end_date, download_directory):
 
     sha256sum_lookup = get_sha256sums(download_directory)
-    possible_archive_formats = ["bz2", "xz", "zst"]
-    missing = []
-    bad_hash = []
+    missing_months = []
+    missing_hashes = []
+    bad_hashes = []
 
     date = start_date
     while date <= end_date:
-        success = False
+        found = False
         for extension in possible_archive_formats:
             year = date.strftime("%Y")
             month = date.strftime("%m")
             file_name = f"RS_{year}-{month}.{extension}"
             file_path = os.path.join(download_directory, file_name)
             if os.path.exists(file_path):
-                calculated_hash = calculate_file_sha256sum(file_path)
+                found = True
+
                 if file_name not in sha256sum_lookup:
                     logger.info(f"No sha256 found for {file_path}")
-                elif calculated_hash != sha256sum_lookup[file_name]:
-                    bad_hash.append(file_name)
-                    logger.info(f"sha256 doesn't match for file {file_path}")
-                else:
-                    logger.info(f"{file_path} hash validated")
-                    success = True
-                    break
+                    missing_hashes.append(path)
+                else:  
+                    calculated_hash = calculate_file_sha256sum(file_path)
+     
+                    if calculated_hash != sha256sum_lookup[file_name]:
+                        logger.info(f"sha256 doesn't match for file {file_path}")                        
+                        bad_hashes.append(file_name)
+                    else:
+                        logger.info(f"{file_path} hash validated")
+                
+                break
 
-        if not success:
-            missing.append(date.strftime("%Y-%m"))
+        if not found:
+            missing_months.append(date.strftime("%Y-%m"))
 
         date = date + relativedelta(months=+1)
 
-    if missing:
+    if missing_months:
         logger.info("Missing dumps:")
-        for missed in missing:
+        for missed in missing_months:
             logger.info(missed)
-    else:
-        logger.info("No dumps missing.")
+    if missing_hashes:
+        logger.info("Files missing hashes:")
+        for missed in missing_hashes:
+            logger.info(missed)
+    if bad_hashes:
+        logger.info("Files with invalid hashes:")
+        for bad in bad_hashes:
+            logger.info(bad)
 
 def main(logfile_path, start_date, end_date, download_directory):
     setup_logger(logfile_path)
