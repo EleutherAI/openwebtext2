@@ -112,7 +112,7 @@ def verify_dumps(start_date, end_date, download_directory):
 
                 if file_name not in sha256sum_lookup:
                     logger.info(f"No sha256 found for {file_path}")
-                    missing_hashes.append(path)
+                    missing_hashes.append(file_path)
                 else:  
                     calculated_hash = calculate_file_sha256sum(file_path)
      
