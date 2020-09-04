@@ -73,7 +73,7 @@ def process_dump_file(dump_file_path, output_directory):
                 try:
                     reddit_post = json.loads(line)
                 except Exception as ex:
-                    print("JSON decoding failed: ", ex)
+                    logger.info(f"JSON decoding failed: {ex}")
                     continue
 
                 stats["post_count"] += 1
