@@ -29,6 +29,8 @@ def setup_logger(filepath=None, to_console=True, formatter=LogFormatter()):
     logger.setLevel(logging.DEBUG)
     logger.propagate = False
 
+    logger.handlers = []    
+
     # create file handler
     if filepath is not None:
         file_handler = logging.FileHandler(filepath, "a")

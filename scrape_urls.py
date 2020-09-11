@@ -4,11 +4,9 @@ import tqdm
 import time
 from hashlib import sha256
 import tldextract
-import tarfile
-import json
-import io
+import lm_dataformat
 
-from utils import linecount, chunker, mkdir
+from utils import linecount, chunker
 from scrapers import newspaper_scraper
 
 import logging
@@ -37,7 +35,9 @@ def download(url_entry,
 
     uid, url = url_entry
     url = url.strip()
-    fid = "{:07d}-{}".format(uid, sha256(url.encode()).hexdigest())
+
+    # Original script had this, we no longer use - left for future reference
+    # fid = "{:07d}-{}".format(uid, sha256(url.encode()).hexdigest())
 
     # is_good_link, link_type = vet_link(url)
     # if not is_good_link:
@@ -45,52 +45,37 @@ def download(url_entry,
 
     text, meta = scraper(url, memoize)
 
+    # Add top level domain to meta (already includes url among other things)
     ext = tldextract.extract(url)
     domain = '.'.join([x for x in ext if x])
     meta["domain"] = domain
 
     if text is None or text.strip() == "":
-        return ("", meta, fid, uid)
+        return ("", meta)
 
-    return (text, meta, fid, uid)
+    return (text, meta)
 
-def archive_chunk(chunk_id, chunk_data, output_directory, compress_fmt):
-    mkdir(output_directory)
-    texts, metas, fids, uids = zip(*chunk_data)
+def archive_chunk(chunk_data, lm_archiver):      
+    count = 0
+    for text, meta in zip(*chunk_data):
+        if text:
+            count += 1
+            lm_archiver.add_data(text, meta)
+           
+    lm_archiver.commit() 
 
-    doc_count = 0
+    return count
 
-    data_file_name = f"{chunk_id}_data.tar"
-    data_tar_path = os.path.join(output_directory, data_file_name)
-    with tarfile.open(data_tar_path, "w:" + compress_fmt) as tar:
-        for text, fid in zip(texts, fids):
-            doc_count += 1
-
-            text = text.encode("utf-8")
-            tar_info = tarfile.TarInfo(f"{fid}.txt")
-            tar_info.size = len(text)
-            tar.addfile(tar_info, io.BytesIO(text))
-
-    meta_file_name = f"{chunk_id}_meta.tar"
-    meta_tar_path = os.path.join(output_directory, meta_file_name)
-    with tarfile.open(meta_tar_path, "w:" + compress_fmt) as tar:
-        for meta, fid in zip(texts, fids):
-            meta_json = json.dumps(meta)
-            meta_json = meta_json.encode("utf-8")
-            tar_info = tarfile.TarInfo(f"{fid}.json")
-            tar.addfile(tar_info, io.BytesIO(text))
-
-    return doc_count
-
-def scrape_urls(url_file, output_directory, chunk_size, process_count, timeout=-1, compress_fmt="bz2"):
-    checkpoint_file = url_file + '.ckpt'
+def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count, timeout=-1):
+    checkpoint_file = url_file_path + '.ckpt'
     start_chunk = load_state(checkpoint_file) # Pointless?
-    start_elem = start_chunk * chunk_size 
+    start_elem = start_chunk * chunk_size
+    lm_archiver = lm_dataformat.Archive(output_directory_path)
 
     # URLs we haven't scraped yet (if first run, all URLs in file)
-    with open(url_file, "r", encoding="utf-8") as fh:
+    with open(url_file_path, "r", encoding="utf-8") as fh:
 
-        total_chunks = linecount(url_file) // chunk_size
+        total_chunks = linecount(url_file_path) // chunk_size
         logger.info(f"Total chunks: {total_chunks}")
 
         url_entries = enumerate(fh)
@@ -133,7 +118,7 @@ def scrape_urls(url_file, output_directory, chunk_size, process_count, timeout=-
             # archive and save this chunk to file
             progress.write("Compressing...")
             t2 = time.time()
-            count = archive_chunk(chunk_id, chunk_data, output_directory, compress_fmt)
+            count = archive_chunk(chunk_data, lm_archiver)
             progress.write("Archive created in {} seconds".format(time.time() - t2))
 
             # useful_urls = len(list(filter(lambda x: x and x[0], chunk_data)))
@@ -143,15 +128,21 @@ def scrape_urls(url_file, output_directory, chunk_size, process_count, timeout=-
 
     logger.info("Done!")
 
-def main(logfile_path, url_file, output_directory, chunk_size=1000, process_count=10):
+def main(logfile_name, url_file_path, output_directory_root, chunk_size=1000, process_count=10):
+    new_directory_name = os.path.basename(url_file_path).lower().replace(".urls.txt","")
+    output_directory_path = os.path.join(output_directory_root, new_directory_name)
+    logger.info(f"Output Directory: '{output_directory_path}'")
+
+    logfile_path = os.path.join(output_directory_path, logfile_name)
     setup_logger(logfile_path)
-    scrape_urls(url_file, output_directory, chunk_size, process_count)    
+
+    scrape_urls(url_file_path, output_directory_root, chunk_size, process_count)    
 
 if __name__ == "__main__":
-    logfile_path = "scrape_urls.log"
-    url_file = "E:/Eleuther_AI/webtext2/dumps/test/output/RS_2011-01.urls.txt"
+    logfile_name = "scrape_urls.log"
+    url_file_path = "E:/Eleuther_AI/webtext2/dumps/test/output/RS_2011-01.urls.txt"
     process_count = 30
     chunk_size = 1000
     output_directory = "E:/Eleuther_AI/webtext2/dumps/test/scrapes"
 
-    main(logfile_path, url_file, output_directory, process_count=process_count)
+    main(logfile_name, url_file_path, output_directory, process_count=process_count)
