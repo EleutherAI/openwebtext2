@@ -4,19 +4,23 @@ import lm_dataformat
 import tarfile
 import tqdm
 import sys
+import shutil
 
 def repackage(scrape_directory):
     data_file_paths = glob.glob(os.path.join(scrape_directory,"*_data.tar"))
 
-    output_directory = os.path.join(scrape_directory, "lm_dataformat")
-    lm_archive = lm_dataformat.Archive(output_directory)
+    lm_archive = lm_dataformat.Archive(scrape_directory)
 
+    old_directory = os.path.join(scrape_directory, "old")
+    os.makedirs(old_directory)    
     for data_file_path in tqdm.tqdm(data_file_paths):
         with tarfile.open(data_file_path, "r:bz2") as tar:
             for member in tar.getmembers():
                 file_reader = tar.extractfile(member)
                 content = file_reader.read().decode("utf-8")
                 lm_archive.add_data(content)
+        new_path = os.path.join(old_directory, os.path.basename(data_file_path))
+        shutil.move(data_file_path, new_path)
 
     lm_archive.commit() 
 
