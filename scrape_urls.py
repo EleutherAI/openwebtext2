@@ -23,11 +23,11 @@ def load_state(checkpoint_file):
         with open(checkpoint_file) as fp:
             batch_id = fp.read()
             if batch_id == '':
-                return 0
+                return -1
             else:
                 return int(batch_id)
     else:
-        return 0
+        return -1
 
 def download(url_entry, 
              scraper=newspaper_scraper,
@@ -55,9 +55,10 @@ def download(url_entry,
 
     return (text, meta)
 
-def archive_chunk(chunk_data, lm_archiver):      
+def archive_chunk(chunk_data, chunk_id, lm_archiver):      
+    lm_archiver.i = chunk_id
     count = 0
-    for text, meta in zip(*chunk_data):
+    for (text, meta) in chunk_data:
         if text:
             count += 1
             lm_archiver.add_data(text, meta)
@@ -68,7 +69,7 @@ def archive_chunk(chunk_data, lm_archiver):
 
 def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count, timeout=-1):
     checkpoint_file = url_file_path + '.ckpt'
-    start_chunk = load_state(checkpoint_file) # Pointless?
+    start_chunk = load_state(checkpoint_file) + 1
     start_elem = start_chunk * chunk_size
     lm_archiver = lm_dataformat.Archive(output_directory_path)
 
@@ -88,7 +89,7 @@ def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count,
 
         # process one "chunk" of chunk_size URLs at a time
         for i, chunk in enumerate(chunks):
-            chunk_id = start_chunk + i + 1
+            chunk_id = start_chunk + i
 
             progress.write("Downloading chunk {}".format(chunk_id))
             t1 = time.time()
@@ -118,7 +119,7 @@ def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count,
             # archive and save this chunk to file
             progress.write("Compressing...")
             t2 = time.time()
-            count = archive_chunk(chunk_data, lm_archiver)
+            count = archive_chunk(chunk_data, chunk_id, lm_archiver)
             progress.write("Archive created in {} seconds".format(time.time() - t2))
 
             # useful_urls = len(list(filter(lambda x: x and x[0], chunk_data)))
@@ -131,18 +132,19 @@ def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count,
 def main(logfile_name, url_file_path, output_directory_root, chunk_size=1000, process_count=10):
     new_directory_name = os.path.basename(url_file_path).lower().replace(".urls.txt","")
     output_directory_path = os.path.join(output_directory_root, new_directory_name)
-    logger.info(f"Output Directory: '{output_directory_path}'")
+    os.makedirs(output_directory_path, exist_ok=True)
 
     logfile_path = os.path.join(output_directory_path, logfile_name)
     setup_logger(logfile_path)
+    logger.info(f"Output Directory: '{output_directory_path}'") 
 
-    scrape_urls(url_file_path, output_directory_root, chunk_size, process_count)    
+    scrape_urls(url_file_path, output_directory_path, chunk_size, process_count)    
 
 if __name__ == "__main__":
     logfile_name = "scrape_urls.log"
-    url_file_path = "E:/Eleuther_AI/webtext2/dumps/test/output/RS_2011-01.urls.txt"
+    url_file_path = "E:/Eleuther_AI/webtext2/dumps/urls/RS_2011-01.urls.txt"
     process_count = 30
     chunk_size = 1000
-    output_directory = "E:/Eleuther_AI/webtext2/dumps/test/scrapes"
+    output_directory = "E:/Eleuther_AI/webtext2/dumps/scrapes"
 
-    main(logfile_name, url_file_path, output_directory, process_count=process_count)
+    main(logfile_name, url_file_path, output_directory, chunk_size=chunk_size, process_count=process_count)
