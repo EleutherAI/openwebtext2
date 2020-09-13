@@ -67,7 +67,7 @@ def archive_chunk(chunk_data, chunk_id, lm_archiver):
 
     return count
 
-def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count, timeout=-1):
+def scrape_urls(url_file_path, output_directory_path, chunk_size, process_count, timeout=60):
     checkpoint_file = url_file_path + '.ckpt'
     start_chunk = load_state(checkpoint_file) + 1
     start_elem = start_chunk * chunk_size

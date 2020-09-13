@@ -77,6 +77,18 @@ def newspaper_scraper(url, memoize):
         article = newspaper.Article(url, fetch_images=False, memoize_articles=memoize)
         article.download()
         article.parse()
+
+        #print(article.__dict__.keys())                
+        #dict_keys(['config', 'extractor', 'source_url', 'url', 'title', 'top_img', 'top_image', 'meta_img', 'imgs', 'images', 
+        #           'movies', 'text', 'keywords', 'meta_keywords', 'tags', 'authors', 'publish_date', 'summary', 'html', 'article_html', 
+        #           'is_parsed', 'download_state', 'download_exception_msg', 'meta_description', 'meta_lang', 'meta_favicon', 'meta_data', 
+        #           'canonical_link', 'top_node', 'clean_top_node', 'doc', 'clean_doc', 'additional_data', 'link_hash'])
+        
+        #print(article.title)
+        # print(article.meta_lang)
+        # if article.meta_lang != "en" and article.meta_lang:
+        #     print(article.text)
+
         text = article.text
         count = len(text.split())
     except:
@@ -86,6 +98,8 @@ def newspaper_scraper(url, memoize):
         }
 
     metadata = {
+        "title": article.title,
+        "lang": article.meta_lang,
         "url": url,
         "word_count": count,
         "elapsed": time.time() - t1,
