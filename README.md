@@ -73,23 +73,19 @@ if __name__ == '__main__':
 
 This is done within **scrape_urls.py**. 
 
-Either change the hardcoded parameters inside of __name__ == '__main__':, or call the main method from another program.
+Either change the hardcoded parameters inside of __name__ == '__main__':, call the main method from another program, or use command line arguments.
 
-This program iterates through a URL file generated in step 2 above. It does a single URL file at a time and will take many hours. It loads batches of URLs and hands them out to worker processes to scrape using newspaper scraper. It will archive each scraped batch using bz2 tar, one file for text and one for metadata. You can modify the batch size and process count depending on your environment.
+This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by lm_dataformat
+(thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
 
-If you want to filter the urls before scraping we have left an example filter in **filter.py**. You will need to modify **scrape_urls.py** where the url_file is loaded to implement this.
+You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch.
 
-NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed
+If you want to filter the urls before scraping we have left an example filter in **filter.py**. This is mainly to speed up the process by avoiding timeouts or files that obviously won't contain text.
 
-The following example will scrape all URLs found in file found at *output/RS_2011-01.urls.txt*.
+NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed.
 
-```python
-if __name__ == "__main__":
-    logfile_path = "scrape_urls.log"
-    url_file = "output/RS_2011-01.urls.txt"
-    process_count = 30
-    chunk_size = 1000
-    output_directory = "scrapes"
+The following example will scrape all URLs found in file found at *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
 
-    main(logfile_path, url_file, output_directory, process_count=process_count)
+```bash
+python scrape_urls.py output/RS_2011-01.urls.txt scrapes
 ```
