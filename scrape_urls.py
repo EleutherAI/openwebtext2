@@ -5,6 +5,7 @@ import time
 from hashlib import sha256
 import tldextract
 import lm_dataformat
+import sys
 
 from utils import linecount, chunker
 from scrapers import newspaper_scraper
