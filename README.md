@@ -84,7 +84,7 @@ If you want to filter the urls before scraping we have left an example filter in
 
 NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed.
 
-The following example will scrape all URLs found *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
+The following example will scrape all URLs found in *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
 
 ```bash
 python scrape_urls.py output/RS_2011-01.urls.txt scrapes
