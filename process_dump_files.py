@@ -67,7 +67,12 @@ def process_dump_file(dump_file_path, output_directory):
             previous_file_position = current_file_position
 
             # Process chunk + leftover, ignore possibly incomplete last line
-            string_data = chunk.decode('utf-8')
+            try:
+                string_data = chunk.decode('utf-8')
+            except UnicodeDecodeError as e:
+                print(e)
+                print('Error in position {} in file {}'.format(current_file_position, dump_file_path))
+                continue
             lines = string_data.split("\n")
             for i, line in enumerate(lines[:-1]):
                 if i == 0:
