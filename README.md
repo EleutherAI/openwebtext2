@@ -6,6 +6,16 @@ PushShift provides dumps of all reddit posts and submissions, but they are norma
 
 If we require the most recent reddit posts for any reason another project will be required to create a live scraping tool as even the PushShift API is not reliable for recent data.
 
+# Process in colab:
+
+https://github.com/EleutherAI/pushshift_dump_processing/blob/colab/OpenWebText.ipynb
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/colab/OpenWebText.ipynb)
+
+Open the above colab notebook, then enter a start date in the second cell. When you've selected a start date, simply run all cells (cmd / ctrl + f9) to process all pushshift dumps from start date -> present. This may take a several hours - the most recent files are especially large. 
+
+When this is finished, copy the final files over to your drive, and you're done!
+
 **Acknowledgements**  
 Much of this code was written by @hohohoho (researcher2 on github), with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/
 
