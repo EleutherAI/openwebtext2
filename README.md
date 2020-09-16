@@ -8,8 +8,6 @@ If we require the most recent reddit posts for any reason another project will b
 
 # Process in colab:
 
-https://github.com/EleutherAI/pushshift_dump_processing/blob/colab/OpenWebText.ipynb
-
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/colab/OpenWebText.ipynb)
 
 Open the above colab notebook, then enter a start date in the second cell. When you've selected a start date, simply run all cells (cmd / ctrl + f9) to process all pushshift dumps from start date -> present. This may take a several hours - the most recent files are especially large. 
