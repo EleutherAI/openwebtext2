@@ -7,3 +7,4 @@ beautifulsoup4
 newspaper3k
 htmlmin
 lm_dataformat
+jsonlines
