@@ -4,6 +4,9 @@ import os
 import glob
 import math
 import logging
+from multiprocessing import Pool, cpu_count
+from itertools import repeat
+
 
 
 from archive_stream_readers import get_archive_stream_reader
@@ -31,6 +34,7 @@ def process_reddit_post(post):
         return url   
 
 def process_dump_file(dump_file_path, output_directory):
+    logging.info(f"Processing dump file '{dump_file_path}'")
     dump_file_size = os.path.getsize(dump_file_path) 
     logging.info(f"File Size: {(dump_file_size / million):.2f} MB")
 
@@ -83,6 +87,7 @@ def process_dump_file(dump_file_path, output_directory):
                     url_file_handle.write(f"{url}\n") # Actual write to url file
 
             previous_line = lines[-1]
+    logging.info("Done with file.\n")
 
     # Save Stats File
     stats_file_name = dump_file_prefix + ".stats.json"
@@ -107,13 +112,10 @@ def main(dumps_directory, output_directory):
     logger.info(files)
     logger.info("------------------")
 
+    # Do the work!
+    p = Pool(cpu_count())
+    p.starmap(process_dump_file, zip(files, repeat(output_directory)))
 
-    for dump_file_path in files:
-        logging.info(f"Processing dump file '{dump_file_path}'")
-
-        # Do the work!
-        process_dump_file(dump_file_path, output_directory)
-        logging.info("Done with file.\n")
 
 if __name__ == '__main__':
     dumps_directory = "E:/Eleuther_AI/webtext2/dumps/test"
