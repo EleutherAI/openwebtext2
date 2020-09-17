@@ -12,7 +12,7 @@ Much of this code was written by @hohohoho (researcher2 on github), with inspira
 
 # Process in colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/master/OpenWebText.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/master/webtext2_colab.ipynb)
 
 Open the above colab notebook, then enter a start date in the second cell. When you've selected a start date, simply run all cells (cmd / ctrl + f9) to process all pushshift dumps from start date -> present. This may take a several hours - the most recent files are especially large. 
 
