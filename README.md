@@ -7,14 +7,16 @@ PushShift provides dumps of all reddit posts and submissions, but they are norma
 If we require the most recent reddit posts for any reason another project will be required to create a live scraping tool as even the PushShift API is not reliable for recent data.
 
 **Acknowledgements**  
-Much of this code was written by @hohohoho (researcher2 on github), with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/
+Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
 
 # Process in colab:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/master/OpenWebText.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/master/webtext2_colab.ipynb)
 
-Open the above colab notebook, then enter a start date in the second cell. When you've selected a start date, simply run all cells (cmd / ctrl + f9) to process all pushshift dumps from start date -> present. This may take a several hours - the most recent files are especially large. 
+Open the above colab notebook. We recommend you run 5 Colab instances at once, each doing a single dump file. For each instance, set the start and end date/month to be the desired month/year, then change the "colab_instance" to 1 for the first instance, 2 for the second etc. Run the first few cells manually as the Google Drive requires a manual authorization key. After that simply run all remaining cells to perform the dump download, url extraction and url scraping steps.
+
+This may take over a day, so you will need to resume after Colab kicks you off. The scraper script called in the final cell will simply resume from a checkpoint file saved in your google drive. It is important that the colab_instance remains the same, so I save one copy of the Colab notebook to my google drive for each instance. You could just leave it running, but you would be confused if your computer crashed!
 
 When this is finished, copy the final files over to your drive, and you're done!
 
