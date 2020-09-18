@@ -10,7 +10,7 @@ If we require the most recent reddit posts for any reason another project will b
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
 # Processing Status
-We are currently attempting to scrape all of 2011 up to the most recent pushshift dump. Current status is:
+We are currently attempting to scrape all of 2011 up to the most recent pushshift dump. Deadline is 30/09/2020, current status:
 
 | Date Block | Responsible         | Status     |
 | :--------: | :-----------------: | :--------: |
