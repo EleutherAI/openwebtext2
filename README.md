@@ -9,6 +9,21 @@ If we require the most recent reddit posts for any reason another project will b
 **Acknowledgements**  
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
+# Processing Status
+We are currently attempting to scrape all of 2011 up to the most recent pushshift dump. Current status is:
+
+| Date Block | Responsible         | Status     |
+| :--------: | :-----------------: | :--------: |
+|  2011      | researcher2         | Done!    |
+|  2012      | researcher2         | Done!    |
+|  2013      | researcher2         | Done!    |
+|  2014      | bmk                 | Unknown. I believe the URL files have been copied to Nuck. |
+|  2015      | bmk                 | Unknown. I believe the URL files have been copied to Nuck. |
+|  2016      | researcher2         | Used free credits for google cloud 8 vcpu. jan/feb currently running  |
+|  2017      | Sid and Stephen5311 | Sid is currently running Jan to May on Colab. Stephen has started on June on his beast machine at home. |
+|  2018      | researcher2         | Currently spinning up another Hetzner to deal with this. |
+|  2019      | researcher2         | Jan running on colab    |
+|  2020      | researcher2         | Jan - April running on colab    |
 
 # Process in colab:
 
