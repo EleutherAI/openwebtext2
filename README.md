@@ -49,6 +49,9 @@ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sha256 Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
+Select yes on the init step.
+
+Restart your shell to refresh the path.
 
 **Create and activate conda environment**
 
@@ -57,15 +60,13 @@ Environments are saved in a central store on the local disk, no need to create f
 conda create --name pushshift python=3.8
 conda activate pushshift
 ```
+
 **Install Repo and Requirements**
 ```bash
 git clone https://github.com/EleutherAI/pushshift_dump_processing
 cd pushshift_dump_processing
 pip install -r requirements.txt
 ```
-Select yes on the init step.
-
-Restart your shell to refresh the path.
 
 ## Overall Summary
 There are three parts in this pipeline:
