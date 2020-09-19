@@ -37,7 +37,7 @@ When this is finished, copy the final files over to your drive, and you're done!
 
 # Process locally:
 
-##Environment Setup##
+## Environment Setup
 Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
 **Miniconda Install For Linux**
@@ -51,7 +51,7 @@ bash Miniconda3-latest-Linux-x86_64.sh
 ```
 
 **Create and activate conda environment**
-These are stored in a central store on the local disk, no need to create folders like with venv.
+Environments are saved in a central store on the local disk, no need to create folders like with venv.
 ```
 conda create --name pushshift python=3.8
 conda activate pushshift
@@ -63,7 +63,7 @@ cd pushshift_dump_processing
 pip install -r requirements.txt
 ```
 
-## Summary ## 
+## Overall Summary
 There are three parts in this pipeline:
 
 1. Download the compressed pushshift dumps
@@ -123,11 +123,11 @@ Either change the hardcoded parameters inside of __name__ == '__main__':, call t
 This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by lm_dataformat
 (thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
 
-You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch.
+You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch. 
 
 If you want to filter the urls before scraping we have left an example filter in **filter.py**. This is mainly to speed up the process by avoiding timeouts or files that obviously won't contain text.
 
-NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed.
+NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed. DON"T change the batch size if resuming an existing run.
 
 The following example will scrape all URLs found in *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
 
