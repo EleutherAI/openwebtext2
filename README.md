@@ -18,7 +18,7 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2012      | researcher2         | Done!    |
 |  2013      | researcher2         | Done!    |
 |  2014      | bmk                 | Unknown. I believe the URL files have been copied to Nuck. |
-|  2015      | bmk                 | Unknown. I believe the URL files have been copied to Nuck. |
+|  2015      | researcher2         | Currently running on Hetzner. |
 |  2016      | researcher2         | Used free credits for google cloud 8 vcpu. jan/feb currently running  |
 |  2017      | Sid and Stephen5311 | Sid is currently running Jan to May on Colab. Stephen has started on June on his beast machine at home. |
 |  2018      | researcher2         | Currently spinning up another Hetzner to deal with this. |
