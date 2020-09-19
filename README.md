@@ -82,7 +82,7 @@ This is done within **download_pushshift_dumps.py**.
 
 As the pushshift dumps shifted between various compressions formats the program cycles through all possibilities until it finds a matching file for a given month, preventing any duplicates from being downloaded.
 
-To run, either change the hardcoded parameters inside of __name__ == '__main__':, or call the main method from another program. 
+To run, either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
 
 A date range on the main method allows you to do a single month at a time for a concurrent pipeline or if disk space is an issue.
 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
 This is done within **process_dump_files.py**.
 
-Either change the hardcoded parameters inside of __name__ == '__main__':, or call the main method from another program. 
+Either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
 
 The following example will process all dump files found within the *dumps* directory - filename matching "RS_*" for the relevant compression formats. For each matching file a separate *name.stats.json* and *name.urls.txt* will be created in the output directory.
 
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
 This is done within **scrape_urls.py**. 
 
-Either change the hardcoded parameters inside of __name__ == '__main__':, call the main method from another program, or use command line arguments.
+Either change the hardcoded parameters inside of __name__ == '__main__', call the main method from another program, or use command line arguments.
 
 This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by lm_dataformat
 (thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
