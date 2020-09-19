@@ -125,7 +125,7 @@ This is done within **scrape_urls.py**.
 
 Either change the hardcoded parameters inside of __name__ == '__main__', call the main method from another program, or use command line arguments.
 
-This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by  <a href="https://github.com/leogao2/lm_dataformat" target="_blank">lm_dataformat</a>
+This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by [lm_dataformat](https://github.com/leogao2/lm_dataformat)
 (thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
 
 You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch. 
