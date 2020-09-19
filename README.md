@@ -38,20 +38,36 @@ When this is finished, copy the final files over to your drive, and you're done!
 # Process locally:
 
 **Environment Setup**  
-Tested in a basic conda environment, though conda probably isn't necessary.
+Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
-```conda create --name pushshift_dump_processing python=3.8```
+***Miniconda Install For Linux***
+For Linux: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 
-All requirements can be installed with: 
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sha256 Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
 
-```pip install -r requirements.txt```
+***Create and activate conda environment***
+These are stored in a central store on the local disk, no need to create folders like with venv.
+```
+conda create --name pushshift python=3.8
+conda activate pushshift
+```
+***Install Repo and Requirements***
+```bash
+git clone https://github.com/EleutherAI/pushshift_dump_processing
+cd pushshift_dump_processing
+pip install -r requirements.txt
+```
 
-There are three parts in this pipeline so far:
+## Summary ## 
+There are three parts in this pipeline:
 
 1. Download the compressed pushshift dumps
 2. Process the downloaded dump files
 3. Scrape the URLs sourced from step 2
-
 
 
 ## Part 1 - Downloading Compressed Dump Files
