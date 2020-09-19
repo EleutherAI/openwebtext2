@@ -37,11 +37,12 @@ When this is finished, copy the final files over to your drive, and you're done!
 
 # Process locally:
 
-**Environment Setup**  
+##Environment Setup##
 Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
-***Miniconda Install For Linux***
-For Linux: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+**Miniconda Install For Linux**
+
+Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -49,13 +50,13 @@ sha256 Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
 
-***Create and activate conda environment***
+**Create and activate conda environment**
 These are stored in a central store on the local disk, no need to create folders like with venv.
 ```
 conda create --name pushshift python=3.8
 conda activate pushshift
 ```
-***Install Repo and Requirements***
+**Install Repo and Requirements**
 ```bash
 git clone https://github.com/EleutherAI/pushshift_dump_processing
 cd pushshift_dump_processing
