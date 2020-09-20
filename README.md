@@ -19,11 +19,10 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2013      |        | researcher2         | Done!    |
 |  2014      |        | bmk                 | currently running on nuck |
 |  2015      |        | researcher2         | Currently running on Hetzner. |
-|  2016      | 1-6    | researcher2         | Used free credits for google cloud 8 vcpu. may/june currently running |
-|   -        | 7-12   | bmk                 | july-dec on nuck  |
+|  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. may/june currently running |
 |  2017      | 1-5    | Sid                 | Sid is currently running Jan to May on Colab. |
 |   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
-|   -        | 7-12   |                     |  |
+|   -        | 7-12   | bmk                 | jul-dec on nuck |
 |  2018      | 1-2    | researcher2         | Created a second Hetzner box, 30% through Jan and Feb.  |
 |   -        | 3-12   | bmk                 | mar-dec on nuck  |
 |  2019      | 1      | researcher2         | Jan running on colab    |
