@@ -9,6 +9,26 @@ If we require the most recent reddit posts for any reason another project will b
 **Acknowledgements**  
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
+# Processing Status
+We are currently attempting to scrape all of 2011 up to the most recent pushshift dump. Deadline is 30/09/2020, current status:
+
+| Year       | Months | Responsible         | Status     |
+| :--------: | :----: | :-----------------: | :--------: |
+|  2011      |        | researcher2         | Done!    |
+|  2012      |        | researcher2         | Done!    |
+|  2013      |        | researcher2         | Done!    |
+|  2014      |        | bmk                 | currently running on nuck |
+|  2015      |        | researcher2         | Running on Eleuther Hetzner. June currently running |
+|  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. July currently running|
+|  2017      | 1-5    | Sid                 | Done! |
+|   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
+|   -        | 7-11   | Sid                 | Running on colab |
+|   -        | 12     | Unassigned          | Unassigned |
+|  2018      | 1-2    | researcher2         | Created a second Hetzner box, Feb currently running  |
+|   -        | 3-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
+|  2019      | 1      | researcher2         | Done!    |
+|   -        | 2-12   | bmk                 | feb-dec on nuck    |
+|  2020      | 1-4    | researcher2         | Running on colab (no more currently available from pushshift)    |
 
 # Process in colab:
 
@@ -16,27 +36,49 @@ Much of this code was written by @researcher2, with inspiration and some straigh
 
 Open the above colab notebook. We recommend you run 5 Colab instances at once, each doing a single dump file. For each instance, set the start and end date/month to be the desired month/year, then change the "colab_instance" to 1 for the first instance, 2 for the second etc. Run the first few cells manually as the Google Drive requires a manual authorization key. After that simply run all remaining cells to perform the dump download, url extraction and url scraping steps.
 
-This may take over a day, so you will need to resume after Colab kicks you off. The scraper script called in the final cell will simply resume from a checkpoint file saved in your google drive. It is important that the colab_instance remains the same, so I save one copy of the Colab notebook to my google drive for each instance. You could just leave it running, but you would be confused if your computer crashed!
+This may take over a day, so you will need to resume after Colab kicks you off. Re-run the setup setups, and then the final cell. The scraper script called in the final cell will resume from a checkpoint file saved in your google drive. It is important that the colab_instance remains the same, so I save one copy of the Colab notebook to my google drive for each instance. You could just leave it running, but you might be confused if your computer crashed!
 
 When this is finished, copy the final files over to your drive, and you're done!
 
 # Process locally:
 
-**Environment Setup**  
-Tested in a basic conda environment, though conda probably isn't necessary.
+## Environment Setup
+Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
-```conda create --name pushshift_dump_processing python=3.8```
+**Miniconda Install For Linux**
 
-All requirements can be installed with: 
+Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 
-```pip install -r requirements.txt```
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+sha256 Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh
+```
+Select yes on the init step.
 
-There are three parts in this pipeline so far:
+Restart your shell to refresh the path.
+
+**Create and activate conda environment**
+
+Environments are saved in a central store on the local disk, no need to create folders like with venv.
+```
+conda create --name pushshift python=3.8
+conda activate pushshift
+```
+
+**Install Repo and Requirements**
+```bash
+git clone https://github.com/EleutherAI/pushshift_dump_processing
+cd pushshift_dump_processing
+pip install -r requirements.txt
+```
+
+## Overall Summary
+There are three parts in this pipeline:
 
 1. Download the compressed pushshift dumps
 2. Process the downloaded dump files
 3. Scrape the URLs sourced from step 2
-
 
 
 ## Part 1 - Downloading Compressed Dump Files
@@ -45,7 +87,7 @@ This is done within **download_pushshift_dumps.py**.
 
 As the pushshift dumps shifted between various compressions formats the program cycles through all possibilities until it finds a matching file for a given month, preventing any duplicates from being downloaded.
 
-To run, either change the hardcoded parameters inside of __name__ == '__main__':, or call the main method from another program. 
+To run, either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
 
 A date range on the main method allows you to do a single month at a time for a concurrent pipeline or if disk space is an issue.
 
@@ -68,7 +110,7 @@ if __name__ == '__main__':
 
 This is done within **process_dump_files.py**.
 
-Either change the hardcoded parameters inside of __name__ == '__main__':, or call the main method from another program. 
+Either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
 
 The following example will process all dump files found within the *dumps* directory - filename matching "RS_*" for the relevant compression formats. For each matching file a separate *name.stats.json* and *name.urls.txt* will be created in the output directory.
 
@@ -86,16 +128,16 @@ if __name__ == '__main__':
 
 This is done within **scrape_urls.py**. 
 
-Either change the hardcoded parameters inside of __name__ == '__main__':, call the main method from another program, or use command line arguments.
+Either change the hardcoded parameters inside of __name__ == '__main__', call the main method from another program, or use command line arguments.
 
-This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by lm_dataformat
+This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by [lm_dataformat](https://github.com/leogao2/lm_dataformat)
 (thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
 
-You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch.
+You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch. 
 
 If you want to filter the urls before scraping we have left an example filter in **filter.py**. This is mainly to speed up the process by avoiding timeouts or files that obviously won't contain text.
 
-NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed.
+NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed. **DON'T** change the batch size if resuming an existing run.
 
 The following example will scrape all URLs found in *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
 
