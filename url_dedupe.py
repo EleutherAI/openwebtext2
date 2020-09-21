@@ -28,7 +28,7 @@ def url_dedupe(urls_directory):
             for url in url_entries:
                 document_count += 1
 
-                if "url" in seen_urls:  
+                if url in seen_urls:  
                     duplicate_count +=1
                     continue
 
