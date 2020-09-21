@@ -92,10 +92,10 @@ def process_file(file_name, progress_queue, min_grams_queue):
 
     min_grams_queue.put((file_name, min_grams))
 
-def generate_mingrams(scrape_directory, output_pickle_path):
+def generate_minhashes(scrape_directory, output_pickle_path):
     signal.signal(SIGINT, handler)
 
-    # [(file_name, [doc0_mingram, doc1_mingram, ...]), ....]
+    # [(file_name, [doc0_minhash, doc1_minhash, ...]), ....]
     minhashes_by_file = []
     with multiprocessing.Pool(4, init_worker) as pool:
         files = glob.glob(f'{scrape_directory}/*jsonl.zst')
@@ -151,7 +151,7 @@ if __name__ == '__main__':
     output_pickle_path = "E:\Eleuther_AI\webtext2\dedupe\minhashes.pkl"
     
     logger.info("Generating document level minhashes from 5 gram sets")
-    minhashes_by_file = generate_mingrams(scrape_directory, output_pickle_path)
+    minhashes_by_file = generate_minhashes(scrape_directory, output_pickle_path)
     
     logger.info("Pickling minhashes_by_file")
     timer = Timer().start()
