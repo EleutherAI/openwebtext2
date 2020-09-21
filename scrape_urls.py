@@ -143,7 +143,7 @@ def main(logfile_name, url_file_path, output_directory_root, chunk_size=1000, pr
 
 if __name__ == "__main__":
     logfile_name = "scrape_urls.log"
-    url_file_path = "E:/Eleuther_AI/webtext2/dumps/urls/RS_2011-01.urls.txt"
+    url_file_path = "E:/Eleuther_AI/webtext2/dumps/urls/RS_2017-06.urls.txt"
     process_count = 60
     chunk_size = 10000
     output_directory = "E:/Eleuther_AI/webtext2/dumps/scrapes"

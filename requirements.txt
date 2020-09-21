@@ -8,3 +8,4 @@ newspaper3k
 htmlmin
 lm_dataformat
 jsonlines
+datasketch
