@@ -18,16 +18,17 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2012      |        | researcher2         | Done!    |
 |  2013      |        | researcher2         | Done!    |
 |  2014      |        | bmk                 | currently running on nuck |
-|  2015      |        | researcher2         | Currently running on Hetzner. |
-|  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. may/june currently running |
-|  2017      | 1-5    | Sid                 | Sid is currently running Jan to May on Colab. |
+|  2015      |        | researcher2         | Currently running on Hetzner. June currently running |
+|  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. July currently running|
+|  2017      | 1-5    | Sid                 | Done! |
 |   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
-|   -        | 7-12   | bmk                 | jul-dec on nuck |
-|  2018      | 1-2    | researcher2         | Created a second Hetzner box, 30% through Jan and Feb.  |
+|   -        | 7-11   | Sid                 | Running on colab |
+|   -        | 12     | Unassigned          | Unassigned |
+|  2018      | 1-2    | researcher2         | Created a second Hetzner box, Feb currently running  |
 |   -        | 3-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
-|  2019      | 1      | researcher2         | Jan running on colab    |
+|  2019      | 1      | researcher2         | Done!    |
 |   -        | 2-12   | bmk                 | feb-dec on nuck    |
-|  2020      | 1-4    | researcher2         | Jan - April running on colab (no more currently available from pushshift)    |
+|  2020      | 1-4    | researcher2         | Running on colab (no more currently available from pushshift)    |
 
 # Process in colab:
 
