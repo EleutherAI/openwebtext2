@@ -24,8 +24,8 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
 |   -        | 7-11   | Sid                 | Running on colab |
 |   -        | 12     | Unassigned          | Unassigned |
-|  2018      | 1-2    | researcher2         | Created a second Hetzner box, Feb currently running  |
-|   -        | 3-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
+|  2018      | 1-3    | researcher2         | Created a second Hetzner box, March currently running  |
+|   -        | 4-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
 |  2019      | 1      | researcher2         | Done!    |
 |   -        | 2-12   | bmk                 | feb-dec on nuck    |
 |  2020      | 1-4    | researcher2         | Running on colab (no more currently available from pushshift)    |
