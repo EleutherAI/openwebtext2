@@ -28,7 +28,7 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |   -        | 4-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
 |  2019      | 1      | researcher2         | Done!    |
 |   -        | 2-12   | bmk                 | feb-dec on nuck    |
-|  2020      | 1-4    | researcher2         | Running on colab (no more currently available from pushshift)    |
+|  2020      | 1-4    | researcher2         | Running on colab. Jan & Feb complete. |
 
 # Process in colab:
 
