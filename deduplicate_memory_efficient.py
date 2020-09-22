@@ -38,7 +38,7 @@ def perform_minhash_lsh_dedupe(minhashes, output_pickle_path):
 
     print("Pickling Garbage. Mmmmmmm")
     timer.start()
-    pickle.dump(file_garbage_set, open(output_pickle_path, "wb"))
+    pickle.dump(garbage_docs, open(output_pickle_path, "wb"))
     print(timer.stop_string())
 
 if __name__ == '__main__':
