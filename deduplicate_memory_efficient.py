@@ -13,7 +13,7 @@ def perform_minhash_lsh_dedupe(minhashes, output_pickle_path):
         total_documents += len(documents)              
 
     print("Building minhash LSH")
-    timer.start()
+    timer = Timer().start()
     lsh = MinHashLSH(threshold=0.5, num_perm=128)
     progress = tqdm.tqdm(total=total_documents, dynamic_ncols=True, unit_scale=1)
     for file_id, (file_name, documents) in enumerate(minhashes):
