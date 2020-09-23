@@ -23,7 +23,7 @@ Our primary goals for the corpus are:
 1. More data. Coverage of the original OpenWebTextCorpus ended at December 2017.
 2. Include all languages, providing metadata for easy filtering
 3. Provide several versions of the generated corpus for differing user requirements:
-    * Raw version containing all scraped urls from reddit submissions with associated reddit metadata
+    * Raw version containing all scraped pages with associated Reddit submission metadata
     * Plug and play version based on submissions of minimum 3 score with content based fuzzy de-duplication
     * For both of the above versions, the Corpus will be broken up by month/year of Reddit submission and then frozen. Going forward we will provide processed corpus for additional months as they become available on PushShift.
 4. Provide full source code for all stages of the pipeline including deduplication.
