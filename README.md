@@ -38,7 +38,7 @@ As mentioned, once we have completed generating the dataset it will be available
 
 ## The Pipeline
 
-[PushShift](https://www.reddit.com/r/pushshift/comments/bcxguf/new_to_pushshift_read_this_faq/) kindly provides dumps of all reddit posts and submissions, however they are normally a few months behind. While this would be problematic for certain use cases, we don't require up to the minute data for training GPTNeo. For the initial stage of this project we decided to avoid scraping more recent Reddit submissions either directly or via APIs. We may add this in the future.
+[PushShift](https://www.reddit.com/r/pushshift/comments/bcxguf/new_to_pushshift_read_this_faq/) provides dumps of all reddit posts and submissions, however they are normally a few months behind. While this would be problematic for certain use cases, we don't require up to the minute data for training GPTNeo. For the initial stage of this project we decided to avoid scraping more recent Reddit submissions either directly or via APIs. We may add this in the future.
 
 1. Download Reddit submission dump files from PushShift
 2. Process the files to extract URLs from all non-self submissions. Save URLs and Reddit metadata with [lm_dataformat](https://github.com/leogao2/lm_dataformat)
