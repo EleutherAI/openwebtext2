@@ -1,10 +1,50 @@
-# PushShift Dump Processing
+# OpenWebText2
 
-This project is part of Eleuther AI's quest to create a massive repository of text data for training language models. The WebText dataset used for training GPT2 contains websites scraped from all reddit posts between a certain time range. Our aim is to extend this to all reddit posts ever made and we are naming this effort OpenWebText2.
+This repository is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
-PushShift provides dumps of all reddit posts and submissions, but they are normally a few months out of date. This project processes these files. 
+## Background
 
-If we require the most recent reddit posts for any reason another project will be required to create a live scraping tool as even the PushShift API is not reliable for recent data.
+OpenAI required around 40gb of high quality text corpus For training [GPT2](https://openai.com/blog/better-language-models/). Common Crawl provides the scale necessary for modern language models, however the quality is unreliable. Manual curation of Common Crawl is always an option, albeit an expensive one. Thankfully Reddit provides high quality decentralized curation by design, and this became the key innovation for the WebText dataset.
+
+The generation of WebText can be summarized as:
+1. Scrape URLs from all Reddit submissions up to and including December 2017 with 3 or higher score.
+2. Deduplicate scraped content based on URL
+3. Exclude wikipedia (OpenAI already had a separate Wikipedia dataset)
+4. Deduplicate remaining content using undisclosed "heuristic based cleaning". This includes removal of non-english web pages.
+
+Neither the resulting corpus or generation source code was made public, inspiring Aaron Gokaslan and Vanya Cohen to create the [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/).
+
+OpenWebTextCorpus is an open source reproduction of WebText, reifying the "heuristic based cleaning" stage using fuzzy deduplication enforcing a minimum token length. For content based de-duplication they used local-sensitivity-hashing (LSH) with minhash on sets of 5-grams at the document level. Documents were then tokenized and any with less then 128 tokens were removed. After all processing there remained 40GB of text across 8,013,769 documents. The original code is unavailable at this time, but there are several popular repositories that cover the pipeline to various degrees.
+
+## OpenWebText2 Motivation
+
+Our primary goals for the corpus are:
+
+1. More data. Coverage of the original OpenWebTextCorpus ended at December 2017.
+2. Include all languages, providing metadata for easy filtering
+3. Provide several version of the generated corpus for differing user requirements:
+    * Raw version containing all scraped urls from reddit submissions with associated reddit metadata
+    * Plug and play version based on submissions of minimum 3 score with content based fuzzy de-duplication
+    * For both of the above versions, the Corpus will be broken up by month/year of Reddit submission and then frozen. Going forward we will provide processed corpus for additional months as they become available on PushShift.
+4. Provide full source code for all stages of the pipeline including deduplication.
+
+Some additional stretch goals:
+1. PyTorch dataset
+2. TensorFlow dataset
+
+We decided on a rewrite taking inspiration from both https://github.com/yet-another-account/openwebtext/ and https://github.com/jcpeterson/openwebtext.
+
+As mentioned, once we have completed generating the dataset it will be available for download, broken down by month/year of the original Reddit submission. Going forward we will also be providing the corpus as 
+
+## The Pipeline
+
+[PushShift](https://www.reddit.com/r/pushshift/comments/bcxguf/new_to_pushshift_read_this_faq/) kindly provides dumps of all reddit posts and submissions, however they are normally a few months behind. While this would be problematic for certain use cases, we don't require up to the minute data for training GPTNeo. For the initial stage of this project we decided to avoid scraping more recent Reddit submissions either directly or via APIs. We may add this in the future.
+
+1. Download Reddit submission dump files from PushShift
+2. Process the files to extract URLs from all non-self submissions. Save URLs and Reddit metadata with [lm_dataformat](https://github.com/leogao2/lm_dataformat)
+3. Deduplicate the URLs
+4. Scrape the URLs using [Newspaper3k](https://newspaper.readthedocs.io/en/latest/), saving both text and metadata using lm_dataformat
+5. Perform fuzzy deduplication using [MinHashLSH](http://ekzhu.com/datasketch/lsh.html)
 
 **Acknowledgements**  
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
