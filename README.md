@@ -1,6 +1,6 @@
 # PushShift Dump Processing
 
-This project is part of Eleuther AI's quest to create a massive repository of text data for training language models. The WebText dataset used for training GPT2 contains websites scraped from all reddit posts between a certain time range. Our aim is to extend this to all reddit posts ever made and we are naming this effort WebText2.
+This project is part of Eleuther AI's quest to create a massive repository of text data for training language models. The WebText dataset used for training GPT2 contains websites scraped from all reddit posts between a certain time range. Our aim is to extend this to all reddit posts ever made and we are naming this effort OpenWebText2.
 
 PushShift provides dumps of all reddit posts and submissions, but they are normally a few months out of date. This project processes these files. 
 
