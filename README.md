@@ -82,6 +82,8 @@ When this is finished, copy the final files over to your drive, and you're done!
 
 # Process locally:
 
+The below is currently applicable, though will likely change soon once additional functionality is added.
+
 ## Environment Setup
 Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
