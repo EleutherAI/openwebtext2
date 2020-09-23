@@ -65,6 +65,7 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |   -        | 12     | Sid                 | Running on Colab |
 |  2018      | 1-4    | researcher2         | Created a second Hetzner box, April currently running  |
 |   -        | 5-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
+|   -        | 9-12   | Sid                 | Running on Colab |
 |  2019      | 1      | researcher2         | Done!    |
 |   -        | 2-12   | bmk                 | feb-dec on nuck    |
 |  2020      | 1-4    | researcher2         | Running on colab. Jan & Feb complete. |
