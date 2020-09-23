@@ -20,7 +20,7 @@ OpenWebTextCorpus is an open source reproduction of WebText, reifying the "heuri
 
 Our primary goals for the corpus are:
 
-1. More data. Coverage of the original OpenWebTextCorpus ended at December 2017.
+1. More data! Coverage of the original OpenWebTextCorpus ended at December 2017.
 2. Include all languages, providing metadata for easy filtering
 3. Provide several versions of the generated corpus for differing user requirements. Both versions will be broken up by month and frozen, with future months available once PushShift submission dumps become available.
     * Raw version containing all scraped pages with associated Reddit submission metadata
