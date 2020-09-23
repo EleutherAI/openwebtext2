@@ -61,8 +61,8 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. September currently running|
 |  2017      | 1-5    | Sid                 | Done! |
 |   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
-|   -        | 7-11   | Sid                 | Running on colab |
-|   -        | 12     | Unassigned          | Unassigned |
+|   -        | 7-11   | Sid                 | Done! |
+|   -        | 12     | Sid                 | Running on Colab |
 |  2018      | 1-3    | researcher2         | Created a second Hetzner box, March currently running  |
 |   -        | 4-12   | bmk/researcher2     | Whoever makes it here first, researcher2 going forward, bmk going back |
 |  2019      | 1      | researcher2         | Done!    |
