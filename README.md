@@ -4,7 +4,7 @@ This project is part of Eleuther AI's quest to create a massive repository of hi
 
 ## Background
 
-OpenAI required around 40gb of high quality text corpus for training [GPT2](https://openai.com/blog/better-language-models/). Common Crawl provides the scale necessary for modern language models, however the quality is unreliable. Manual curation of Common Crawl is always an option, albeit an expensive one. Thankfully Reddit provides high quality decentralized curation by design, and this became the key innovation for the WebText dataset.
+[OpenAI](https://openai.com/) required around 40gb of high quality text corpus for training [GPT2](https://openai.com/blog/better-language-models/). Common Crawl provides the scale necessary for modern language models, however the quality is unreliable. Manual curation of Common Crawl is always an option, albeit an expensive one. Thankfully Reddit provides high quality decentralized curation by design, and this became the key innovation for the WebText dataset.
 
 The generation of WebText can be summarized as:
 1. Scrape URLs from all Reddit submissions up to and including December 2017 with 3 or higher score.
