@@ -14,7 +14,7 @@ The generation of WebText can be summarized as:
 
 Neither the resulting corpus or generation source code was made public, inspiring Aaron Gokaslan and Vanya Cohen to create the [OpenWebTextCorpus](https://skylion007.github.io/OpenWebTextCorpus/).
 
-OpenWebTextCorpus is an open source reproduction of WebText, reifying the "heuristic based cleaning" stage using fuzzy deduplication enforcing a minimum token length. For content based de-duplication they used local-sensitivity-hashing (LSH) with minhash on sets of 5-grams at the document level. Documents were then tokenized and any with less then 128 tokens were removed. After all processing there remained 40GB of text across 8,013,769 documents. The original code is unavailable at this time, but there are several popular repositories that cover the pipeline to various degrees.
+OpenWebTextCorpus is an open source reproduction of WebText, reifying the "heuristic based cleaning" stage using fuzzy deduplication and enforcing a minimum token length. For content based de-duplication they used local-sensitivity-hashing (LSH) with minhash on sets of 5-grams at the document level. Documents were then tokenized and any with less then 128 tokens were removed. After all processing there remained 40GB of text across 8,013,769 documents. The original code is unavailable at this time, but there are several popular repositories that cover the pipeline to various degrees.
 
 ## OpenWebText2 Motivation
 
