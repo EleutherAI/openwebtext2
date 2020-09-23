@@ -1,6 +1,6 @@
 # OpenWebText2
 
-This repository is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
+This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
 ## Background
 
