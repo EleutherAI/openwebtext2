@@ -89,8 +89,9 @@ Tested in a basic conda environment, though you could use venv or even the globa
 
 **Miniconda Install For Linux**
 
-Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
+Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html  
 
+The sha256sum can be verified at https://docs.conda.io/en/latest/miniconda.html#linux-installers
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 sha256sum Miniconda3-latest-Linux-x86_64.sh
