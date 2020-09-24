@@ -57,8 +57,8 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2012      |        | researcher2         | Done!    |
 |  2013      |        | researcher2         | Done!    |
 |  2014      |        | bmk                 | currently running on nuck |
-|  2015      |        | researcher2         | Running on Eleuther Hetzner. November currently running |
-|  2016      |        | researcher2         | Used free credits for google cloud 8 vcpu. November currently running|
+|  2015      |        | researcher2         | Done! |
+|  2016      |        | researcher2         | Done! |
 |  2017      | 1-5    | Sid                 | Done! |
 |   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
 |   -        | 7-11   | Sid                 | Done! |
