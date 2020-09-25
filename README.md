@@ -56,7 +56,7 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2011      |        | researcher2         | Done!    |
 |  2012      |        | researcher2         | Done!    |
 |  2013      |        | researcher2         | Done!    |
-|  2014      |        | bmk                 | currently running on nuck |
+|  2014      |        | bmk                 | Done! |
 |  2015      |        | researcher2         | Done! |
 |  2016      |        | researcher2         | Done! |
 |  2017      | 1-5    | Sid                 | Done! |
@@ -66,7 +66,9 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2018      | 1-8    | researcher2         | Created a second Hetzner box, August currently running  |
 |   -        | 9-12   | Sid                 | Running on Colab |
 |  2019      | 1      | researcher2         | Done!    |
-|   -        | 2-12   | bmk                 | feb-dec on nuck    |
+|   -        | 2-6    | bmk                 | Done!    |
+|   -        | 7-10   | bmk                 | July running on nuck    |
+|   -        | 11-12  | researcher2         | Running on Hetzner |
 |  2020      | 1-4    | researcher2         | Done! |
 
 # Process in colab:
