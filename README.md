@@ -60,7 +60,7 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2015      |        | researcher2         | Done |
 |  2016      |        | researcher2         | Done |
 |  2017      | 1-5    | Sid                 | Done |
-|   -        | 6      | Stephen5311         | Stephen has started on June on his beast machine at home. |
+|   -        | 6      | Stephen5311         | In progress, Stephen will provide google drive link shortly. |
 |   -        | 7-11   | Sid                 | Done |
 |   -        | 12     | Sid                 | Running on Colab |
 |  2018      | 1-8    | researcher2         | Done  |
