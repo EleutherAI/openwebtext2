@@ -62,13 +62,11 @@ All years have been scraped. Currently running url dedupe on the scrapes. After 
 |  2016      |        | researcher2         | Done |
 |  2017      | 1-5    | Sid                 | Done |
 |   -        | 6      | researcher2         | Done |
-|   -        | 7-11   | Sid                 | Done |
-|   -        | 12     | Sid                 | Done |
+|   -        | 7-12   | Sid                 | Done |
 |  2018      | 1-8    | researcher2         | Done  |
 |   -        | 9-12   | Sid                 | Done |
 |  2019      | 1      | researcher2         | Done    |
-|   -        | 2-6    | bmk                 | Done    |
-|   -        | 7-10   | bmk                 | Done    |
+|   -        | 2-10    | bmk                 | Done    |
 |   -        | 11-12  | researcher2         | Done |
 |  2020      | 1-4    | researcher2         | Done |
 
