@@ -49,10 +49,11 @@ The pipeline is broken down as follows:
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
 # Processing Status
-We are currently attempting to scrape all of 2011 up to the most recent pushshift dump. Deadline is 30/09/2020, current status:
+All years have been scraped. Currently running url dedupe on the scrapes. After that will come metadata merge and removal of scrapes with score below 3. Finally we will perform content deduplication with minhash lsh.
 
 | Year       | Months | Responsible         | Status     |
 | :--------: | :----: | :-----------------: | :--------: |
+|  2005-2010 |        | researcher2         | Done    |
 |  2011      |        | researcher2         | Done    |
 |  2012      |        | researcher2         | Done    |
 |  2013      |        | researcher2         | Done    |
@@ -60,15 +61,15 @@ We are currently attempting to scrape all of 2011 up to the most recent pushshif
 |  2015      |        | researcher2         | Done |
 |  2016      |        | researcher2         | Done |
 |  2017      | 1-5    | Sid                 | Done |
-|   -        | 6      | Stephen5311         | In progress, Stephen will provide google drive link shortly. |
+|   -        | 6      | researcher2         | Done |
 |   -        | 7-11   | Sid                 | Done |
-|   -        | 12     | Sid                 | Running on Colab |
+|   -        | 12     | Sid                 | Done |
 |  2018      | 1-8    | researcher2         | Done  |
-|   -        | 9-12   | Sid                 | Running on Colab |
+|   -        | 9-12   | Sid                 | Done |
 |  2019      | 1      | researcher2         | Done    |
 |   -        | 2-6    | bmk                 | Done    |
-|   -        | 7-10   | bmk                 | July running on nuck    |
-|   -        | 11-12  | researcher2         | Running on Hetzner |
+|   -        | 7-10   | bmk                 | Done    |
+|   -        | 11-12  | researcher2         | Done |
 |  2020      | 1-4    | researcher2         | Done |
 
 # Process in colab:
