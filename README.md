@@ -52,6 +52,7 @@ Much of this code was written by @researcher2, with inspiration and some straigh
 All years have been scraped.  
 Scrapes have been deduped based on URL.  
 Scrapes have had reddit metadata merged  
+Scrapes have been filtered based on minimum total reddit score of 3
 Currently generating document minhashes (10 hash functions) based on 5 grams for all scrapes  
 
 | Year       | Months | Responsible         | Status     |
