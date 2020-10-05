@@ -49,7 +49,10 @@ The pipeline is broken down as follows:
 Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
 
 # Processing Status
-All years have been scraped. Currently running url dedupe on the scrapes. After that will come metadata merge and removal of scrapes with score below 3. Finally we will perform content deduplication with minhash lsh.
+All years have been scraped.
+Scrapes have been deduped based on URL.
+Scrapes have had reddit metadata merged in
+Currently generating document minhashes (10 hash functions) based on 5 grams for all scrapes
 
 | Year       | Months | Responsible         | Status     |
 | :--------: | :----: | :-----------------: | :--------: |
