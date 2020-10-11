@@ -1,4 +1,4 @@
-# OpenWebText2
+79# OpenWebText2
 
 This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
@@ -17,8 +17,8 @@ openwebtext2_pnp.tar (28gb compressed including text and metadata) **currently u
 ### Raw Scrapes
 Only deduplicated by URL.
 
-Contains 69,547,149 documents for a total of ??gb uncompressed text.  
-openwebtext2_raw.tar (??gb compressed including text and metadata) **currently uploading**
+Contains 69,547,149 documents for a total of 193.89gb uncompressed text.  
+openwebtext2_raw.tar (79gb compressed including text and metadata) **currently uploading**
 
 ## Background
 
