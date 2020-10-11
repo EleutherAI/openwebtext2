@@ -46,33 +46,7 @@ The pipeline is broken down as follows:
 5. Perform fuzzy deduplication using [MinHashLSH](http://ekzhu.com/datasketch/lsh.html)
 
 **Acknowledgements**  
-Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook.
-
-# Processing Status
-All years have been scraped.  
-Scrapes have been deduped based on URL.  
-Scrapes have had reddit metadata merged  
-Scrapes have been filtered based on minimum total reddit score of 3
-Currently generating document minhashes (10 hash functions) based on 5 grams for all scrapes  
-
-| Year       | Months | Responsible         | Status     |
-| :--------: | :----: | :-----------------: | :--------: |
-|  2005-2010 |        | researcher2         | Done    |
-|  2011      |        | researcher2         | Done    |
-|  2012      |        | researcher2         | Done    |
-|  2013      |        | researcher2         | Done    |
-|  2014      |        | bmk                 | Done |
-|  2015      |        | researcher2         | Done |
-|  2016      |        | researcher2         | Done |
-|  2017      | 1-5    | Sid                 | Done |
-|   -        | 6      | researcher2         | Done |
-|   -        | 7-12   | Sid                 | Done |
-|  2018      | 1-8    | researcher2         | Done  |
-|   -        | 9-12   | Sid                 | Done |
-|  2019      | 1      | researcher2         | Done    |
-|   -        | 2-10    | bmk                 | Done    |
-|   -        | 11-12  | researcher2         | Done |
-|  2020      | 1-4    | researcher2         | Done |
+Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook, and performed a chunk of the scraping. @leogao2 provided lm_dataformat as well as performing another chunk of scraping.
 
 # Process in colab:
 
