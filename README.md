@@ -3,11 +3,15 @@
 This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
 ## TLDR (Just Give Me Datas)
+Please checkout [lm_dataformat](https://github.com/leogao2/lm_dataformat) for reading the files, or look at our slightly modified version included in utils/archiver.py. Be sure to call read_jsonl with get_meta=True as both versions contain useful metadata (including several original Reddit fields) for each document.
 
-The data can be downloaded from:  
+### Plug and Play Version - Filtered by minimum reddit score 3 and deduped with MinHashLSH
+Contains 17,103,059 documents for a total of 65.86gb uncompressed text.  
+openwebtext2_pnp.tar (28gb compressed including text and metadata) **currently uploading**
 
-Raw Scrapes With Reddit Metadata: *currently uploading*  
-Plug and Play Version (Filtered by minimum reddit score 3 and deduped): *currently uploading*
+### Raw Scrapes - No score based filtering or MinHashLSH dedupe. Only deduped by URL
+Contains 69,547,149 documents for a total of ??gb uncompressed text.  
+openwebtext2_raw.tar (??gb compressed including text and metadata) **currently uploading**
 
 ## Background
 
