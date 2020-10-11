@@ -53,6 +53,8 @@ We decided on a rewrite taking inspiration from both https://github.com/yet-anot
 
 ## The Pipeline
 
+**NOTE:** We are currently rewriting the pipeline to make it more hands off.
+
 [PushShift](https://www.reddit.com/r/pushshift/comments/bcxguf/new_to_pushshift_read_this_faq/) provides dumps of all reddit posts and submissions, however they are normally a few months behind. While this would be problematic for certain use cases, we don't require up to the minute data for training GPTNeo. For the initial stage of this project we decided to avoid scraping more recent Reddit submissions either directly or via APIs. We may add this in the future.
 
 The pipeline is broken down as follows:
