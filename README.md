@@ -3,7 +3,7 @@
 This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
 **Acknowledgements**  
-Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook, and performed a chunk of the scraping. @leogao2 provided lm_dataformat as well as performing another chunk of scraping.
+Much of this code was written by @researcher2, with inspiration and some straight copying of the scraping code found at https://github.com/yet-another-account/openwebtext/. @sdtblck kindly put together the Colab notebook, and performed a chunk of the scraping. @leogao2 provided overall design guidance, lm_dataformat, and performed another chunk of scraping.
 
 ## TLDR (Just Give Me Datas)
 Please checkout [lm_dataformat](https://github.com/leogao2/lm_dataformat) for reading the files, or look at our slightly modified version included in utils/archiver.py. Be sure to call read_jsonl with get_meta=True as both versions contain useful metadata for each document, including several original Reddit fields.
