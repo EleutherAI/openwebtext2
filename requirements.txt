@@ -9,3 +9,10 @@ htmlmin
 lm_dataformat
 jsonlines
 datasketch
+colorama
+cutie
+sqlalchemy
+tqdm-multiprocess
+base36
+alembic
+cassandra-driver

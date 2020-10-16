@@ -1,6 +1,23 @@
 import collections
 import os
 import time
+import pickle
+
+import logging
+logger = logging.getLogger(__name__)
+
+def timed_pickle_load(file_name, pickle_description):
+    logger.info(f"Unpickling {pickle_description}...")
+    timer = Timer().start()
+    unpickled = pickle.load(open(file_name, "rb"))
+    logger.info(timer.stop_string())
+    return unpickled
+
+def timed_pickle_dump(the_object, file_name, pickle_description):
+    logger.info(f"Pickling {pickle_description}...")
+    timer = Timer().start()
+    pickle.dump(the_object, open(file_name, "wb"))
+    logger.info(timer.stop_string())
 
 class TimerError(Exception):
     """A custom exception used to report errors in use of Timer class"""

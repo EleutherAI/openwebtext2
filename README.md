@@ -1,4 +1,4 @@
-79# OpenWebText2
+# OpenWebText2
 
 This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
 
@@ -53,43 +53,27 @@ We decided on a rewrite taking inspiration from both https://github.com/yet-anot
 
 ## The Pipeline
 
-**NOTE:** We are currently rewriting the pipeline to make it more hands off.
-
 [PushShift](https://www.reddit.com/r/pushshift/comments/bcxguf/new_to_pushshift_read_this_faq/) provides dumps of all reddit posts and submissions, however they are normally a few months behind. While this would be problematic for certain use cases, we don't require up to the minute data for training GPTNeo. For the initial stage of this project we decided to avoid scraping more recent Reddit submissions either directly or via APIs. We may add this in the future.
 
-The pipeline is broken down as follows:
+At a high level the pipeline is broken down as follows:
 
 1. Download Reddit submission dump files from PushShift
 2. Process the files to extract URLs from all non-self submissions. Save URLs and Reddit metadata with [lm_dataformat](https://github.com/leogao2/lm_dataformat)
 3. Deduplicate the URLs
 4. Scrape the URLs using [Newspaper3k](https://newspaper.readthedocs.io/en/latest/), saving both text and metadata using lm_dataformat
-5. Perform fuzzy deduplication using [MinHashLSH](http://ekzhu.com/datasketch/lsh.html)
-
-# Process in colab:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/EleutherAI/pushshift_dump_processing/blob/master/webtext2_colab.ipynb)
-
-Open the above colab notebook. We recommend you run 5 Colab instances at once, each doing a single dump file. For each instance, set the start and end date/month to be the desired month/year, then change the "colab_instance" to 1 for the first instance, 2 for the second etc. Run the first few cells manually as the Google Drive requires a manual authorization key. After that simply run all remaining cells to perform the dump download, url extraction and url scraping steps.
-
-This may take over a day, so you will need to resume after Colab kicks you off. Re-run the setup setups, and then the final cell. The scraper script called in the final cell will resume from a checkpoint file saved in your google drive. It is important that the colab_instance remains the same, so I save one copy of the Colab notebook to my google drive for each instance. You could just leave it running, but you might be confused if your computer crashed!
-
-When this is finished, copy the final files over to your drive, and you're done!
-
-# Process locally:
-
-The below is currently applicable, though will likely change soon once additional functionality is added.
+5. Filter the scraped documents by minimum Reddit score 3.
+6. Perform fuzzy deduplication using [MinHashLSH](http://ekzhu.com/datasketch/lsh.html)
 
 ## Environment Setup
 Tested in a basic conda environment, though you could use venv or even the global python environment if you wish. I use miniconda to avoid a bloated download.
 
 **Miniconda Install For Linux**
 
-Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html  
+Follow the below steps, or read the conda instructions if you wish: https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html
 
-The sha256sum can be verified at https://docs.conda.io/en/latest/miniconda.html#linux-installers
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-sha256sum Miniconda3-latest-Linux-x86_64.sh
+sha256 Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh
 ```
 Select yes on the init step.
@@ -111,74 +95,308 @@ cd pushshift_dump_processing
 pip install -r requirements.txt
 ```
 
-## Overall Summary
-There are three parts in this pipeline:
+## Processing Instructions
+Broadly there are five stages in this pipeline:
 
-1. Download the compressed pushshift dumps
-2. Process the downloaded dump files
-3. Scrape the URLs sourced from step 2
+1. Processing the PushShift submission dumps
+2. Scraping the extracted URLs
+3. Filtering the scraped doucuments by aggregate minimum Reddit score
+4. De-duplicating the filtered documents with MinHashLSH
+5. Packaging up the various dataset releases
+6. Produce some useful stats about our releases
 
+For all steps below we assume you have completed the environment setup.
 
-## Part 1 - Downloading Compressed Dump Files
+## Stage 1 - Processing PushShift Submission Dumps
 
-This is done within **download_pushshift_dumps.py**.
+This is broken down into the following steps:
 
-As the pushshift dumps shifted between various compressions formats the program cycles through all possibilities until it finds a matching file for a given month, preventing any duplicates from being downloaded.
+1. Download and verify the PushShift submission dumps, extracting and storing urls and metadata
+from relevant submissions into the sqlite database. Performed by "pushshift/pushshift_to_sqlite.py".
+2. Query the populated sqlite database and build a list of URLs with metadata for all related submissions.
+Performed by "pushshift/generate_urls_from_sqlite.py"
 
-To run, either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
+All scripts for this stage can be found within the "pushshift" package.
 
-A date range on the main method allows you to do a single month at a time for a concurrent pipeline or if disk space is an issue.
+### Initial Preparation
+You will first need to create a working directory on a drive with plenty of space (500gb recommended). Then configure your sqlite database settings as follows:
 
-The following example will download all pushshift dumps up until the most recent into the *dumps* subfolder of the current path. Log can be found in *./download_pushshift_dumps.log*.
-
-```python
-if __name__ == '__main__':
-    logfile_path = "download_pushshift_dumps.log"
-    
-    start_date = datetime.datetime(2011, 1, 1)    
-    end_date = datetime.datetime.now()
-
-    download_directory = "dumps"
-
-    main(logfile_path, start_date, end_date, download_directory) 
+Inside the cloned repo:
+```bash
+cp alembic.ini.template alembic.ini
 ```
- 
-
-## Part 2 - Processing The Downloaded Dumps
-
-This is done within **process_dump_files.py**.
-
-Either change the hardcoded parameters inside of __name__ == '__main__', or call the main method from another program. 
-
-The following example will process all dump files found within the *dumps* directory - filename matching "RS_*" for the relevant compression formats. For each matching file a separate *name.stats.json* and *name.urls.txt* will be created in the output directory.
-
-Currently we support the three different compression formats provided by PushShift - bz2, xz, zst.
-
-```python
-if __name__ == '__main__':
-    dumps_directory = "dumps"
-    output_directory_root = "output"
-
-    main(dumps_directory, output_directory_root)
+Modify the following line within the alembic.ini file. For example on windows:
+```
+sqlalchemy.url = sqlite:///e:/Eleuther_AI/webtext2/submissions.sqlite
+```
+Or on Linux (notice the extra forward slash before "mnt" to indicate system root):
+```
+sqlalchemy.url = sqlite:////mnt/data/openwebtext2/submissions.sqlite
 ```
 
-## Part 3 - Scraping From Sourced URLs
+### PushShift Submission Dump Data -> Sqlite DB
 
-This is done within **scrape_urls.py**. 
+This step is performed by "pushshift/pushshift_to_sqlite.py". The script accepts the following arguments:
 
-Either change the hardcoded parameters inside of __name__ == '__main__', call the main method from another program, or use command line arguments.
+--start_period (-s)
+    Month and Year of first pushshift dump. Default: 6,2005
+--finish_period (-f)
+    Month and Year of final pushshift dump. Defaults to current month, ignoring any missing months.
+--output_directory (-dir)
+    Base directory that will contain the dumps subdirectory created as part of the process.
+--keep_dumps (-kd)
+    If specified the dump won't be deleted after successful processing.
 
-This program iterates through a URL file generated in step 2 above. It loads batches of URLs and hands them out to worker processes which scrape using newspaper scraper. Each batch will be archived using jsonl zst provided by [lm_dataformat](https://github.com/leogao2/lm_dataformat)
-(thanks @bmk). Some metadata like language, url, top level domain, word count, and title are saved in the metadata field offered by lm_dataformat.
+Notice the database location is not specified here, this is always sourced from the alembic.ini file.
 
-You may need to modify the batch size and process count depending on your environment. The default settings are batch size 10000, and process count 60, this will spike cpu usage to 100% at the start of each batch. 
+For example on Linux, to download and process all dumps, leaving the downloaded dumps afterwards:
+```bash
+python -m pushshift.pushshift_to_sqlite -dir /mnt/data/openwebtext2 -kd
+```
 
-If you want to filter the urls before scraping we have left an example filter in **filter.py**. This is mainly to speed up the process by avoiding timeouts or files that obviously won't contain text.
+Test run on 2006 only, deleting dumps when done:
+```bash
+python -m pushshift.pushshift_to_sqlite -s 1,2006 -f 12,2006 -dir /mnt/data/openwebtext2
+```
 
-NOTE: The program saves a checkpoint file in the same directory as the url.txt file to allow you to resume later if the job dies or needs to be killed. **DON'T** change the batch size if resuming an existing run.
+This step uses checkpointing, saving a .dbdone file for each dump once processing is complete. So if you need to stop and come back later you can.
 
-The following example will scrape all URLs found in *output/RS_2011-01.urls.txt*, using lm_dataformat to save the text and metadata into files within *scrapes/rs_2011-01*.
+### Extract Unique URLs with Reddit Metadata
+
+This step is performed by "pushshift/generate_urls_from_sqlite.py". The script accepts the following arguments:
+
+--start_period (-s)
+    Month and Year of first URLs. Default: 6,2005
+--finish_period (-f)
+    Month and Year of final URLs. Defaults to current month.
+--output_directory (-dir)
+    Base directory that will contain the urls subdirectory created as part of the process.
+--urls_per_file
+    Maximum number of urls per file. Defaults to 100,000.
+
+Notice the database location is not specified here, this is always sourced from the alembic.ini file.
+
+For example on Linux, to extract all urls 
+```bash
+python -m pushshift.generate_urls_from_sqlite -dir /mnt/data/openwebtext2
+```
+
+Test run on 2006 only:
+```bash
+python -m pushshift.generate_urls_from_sqlite -s 1,2006 -f 12,2006 -dir /mnt/data/openwebtext2
+```
+
+## Stage 2 - Scraping From Sourced URLs
+
+This stage is performed by "scraping/scrape_urls.py". Note that this is quite a long process, taking us
+several weeks.
+
+This program iterates through URL files generated in step 2 above. For each file its hands out the URLs
+to a multiprocessing pool for scraping. Once all URLs in the batch are scraped, the successful results are 
+archived using a slightly modified version of [lm_dataformat](https://github.com/leogao2/lm_dataformat)
+(thanks @bmk). The following metadata fields are saved in the metadata dict offered by lm_dataformat:
+
+title: Web Page Title  
+lang: Language detected by Newspaper scraper.  
+url: Original URL.  
+word_count: Total words outputted by Newspaper.  
+elapsed: Scraping time.  
+scraper: Always "newspaper".  
+domain: Top level domain for the original URL.  
+reddit_id: List of submission IDs containing URL - converted from base36.  
+subreddit: List of subreddits for the corresponding submissions.  
+reddit_score: List of reddit scores for the corresponding submissions.  
+reddit_title: List of submissions titles for the corresponding submissions.  
+reddit_created_utc: List of submissions created times for the corresponding submissions.
+
+The script accepts the following arguments:
+
+--job_directory (-dir)
+    Base directory containing the urls subdirectory and location where the scrapes subdirectory
+    will be created.
+--process_count (-procs)
+    Number of worker processes in the pool. Defaults to 60. Don't go above this on Windows.
+--request_timeout (-timeout)
+    Scraping timeout for each URL. Defaults to 30 seconds.
+
+The program will look for URL files within "job_directory/urls". All scrapes will be stored in "job_directory/scrapes"
+
+For example on Linux, this will scrape using 90 processes and 30 second timeout:
+```bash
+python -m scraping.scrape_urls -dir /mnt/data/openwebtext2 -procs 90
+```
+
+On a dedicated 2012 i7 Linux machine we used between 90 and 120 processes successfully.
+
+We do some limited URL filtering in "scraping/filter.py". This is mainly to speed up the process by avoiding timeouts or files that obviously won't contain text.
+
+NOTE: Once each URL file is scraped, the program saves a ".done" file so you can resume later without rescraping.
+      That file contains a count of successfully scraped URLs if you are interested.
+
+## Stage 3 - Filtering scraped documents by minimum total Reddit score
+
+This step is performed by "cleaning/filter_from_reddit_score.py".
+
+This script filters all scrape files "scrapes_*.jsonl.zst" by minimum total Reddit score.
+Unlike the original WebText we aggregate scores for all submissions containing a given
+URL so the bar is slightly lower in some cases, but in others where a URL went negative
+in one submission it will balance out.
+
+The filtered scrapes file will have the original name and path of the scrape file with a 
+".minscored" extension.
+
+The script accepts the following arguments:
+
+--scrape_directory (-dir)
+    Directory containing the scrapes. You could use the overall work directory if you 
+    want as we use glob.glob to search recursively.
+
+For example on Linux:
+```bash
+python -m cleaning.filter_from_reddit_score -dir /mnt/data/openwebtext2/scrapes
+```
+
+## Stage 4 - Deduplicate Filtered Documents using MinHashLSH with Cassandra
+
+There are several sub-stages here:
+
+1. Generate minhashes for every document
+2. Batch up the minhashes for running parallel dedupe
+3. Using MinHashLSH With Cassandra - Generate lists of duplicates
+4. Deduplicating our documents using the lists from step 3.
+
+All scripts for this stage can be found within the "cleaning" package.
+
+### Generate Minhashes For Every Document
+
+This step is performed by "cleaning/generate_minhashes.py" and took about 1.5 days
+on a 2012 i7 Linux machine.
+
+This script calculates minhashes for all filtered scrape files found using a recursive
+search on "\*.minscored".
+
+More explicity, we create a set of 5-grams for each document, and generate document 
+level minhashes using 10 hash functions with the excellent datasketch library.
+
+A single file "minhashes.pkl" is created in the scrape directory storing a data
+structure in the following format:
+
+[(file_name1, [doc0_minhash, doc1_minhash, ...]), (file_name2, [....]), ....]
+
+The script accepts the following arguments:
+
+--scrape_directory (-dir)
+    Directory containing the minscored scrapes. You could use the overall work directory if you 
+    want as we use glob.glob to search recursively.
+--process_count (-procs)
+    Number of worker processes in the pool. Defaults to 4.
+
+For example on Linux:
+```bash
+python -m cleaning.generate_minhashes -dir /mnt/data/openwebtext2/scrapes
+```
+
+### Slice The Minhashes For Batching
+
+This step is performed by "cleaning/minhash_lsh_batching.py" and splits "minhashes.pkl" into 
+approximately the desired number of batches.
+
+The script accepts the following arguments:
+--directory (-dir)
+    Directory containing the 'minhashes.pkl' file. Batch files and
+    file name lookup will be saved here.
+--number_of_batches (-batches)
+    Approximate number of batches to split minhashes into.
+
+The "directory" must contain a 'minhashes.pkl' file created with 'generate_minhashes.py'.
+
+Produces batch files named 'batch0.pkl, batch1.pkl ...'. They contain the following
+pickled data structure:
+[(file_id, [doc0_minhash, doc1_minhash, ...]), ....]
+
+Produces a file name lookup named 'file_name_lookup.pkl'. Contains the following
+pickled data structure:
+[file_name1, file_name2, file_name3, ...]
+
+
+For example on Linux with 16 batches:
+```bash
+python -m cleaning.minhash_lsh_batching -dir /mnt/data/openwebtext2/scrapes -batches 16
+```
+
+### Find Duplicates Using MinHashLSH with Cassandra
+
+This step is performed by "cleaning/minhash_lsh_dedupe.py" and generates a list of detected
+duplicates for each located "batch\*.pkl" file found in the batch_directory.
+
+The script accepts the following arguments:
+
+--batch_directory (-dir)
+    Directory containing the "batch\*.pkl" files. "lsh.pkl", duplicate lists and
+    batch checkpoints will be saved here. 
+--process_count (-procs)
+    Number of processes in the pool. Defaults to 1.
+
+See the file for more documentation, but importantly: once you run the script you must keep using 
+the same MinHashLSH object pickled to "lsh.pkl" if you want the same basenames for the created Cassandra 
+tables.
+
+We are running into issues with loading this MinHashLSH object in multiple processes
+so did our run with just a single process. The first run will freeze when trying
+to unpickle the MinHashLSH object in the worker process. On running a second time it 
+will work.
+
+We save file and document level checkpoints after each query to allow for easy resuming.
+Each batch file will have a corresponding "\*duplicates.txt" when done.
+
+For example on Linux with the default 1 process:
 
 ```bash
-python scrape_urls.py output/RS_2011-01.urls.txt scrapes
+python -m cleaning.minhash_lsh_dedupe -dir /mnt/data/openwebtext2/scrapes
 ```
+
+### De-Duplicating Using Generated Duplicate Lists
+
+This step is performed by "cleaning/dedupe_from_indexes.py", which accept the following arguments:
+
+--batch_directory (-dir)
+    Directory containing the "\*duplicates.txt" files along with the "file_name_lookup.pkl"
+    created during batch slicing. The "\*final.jsonl.zst" files will be output in their
+    original directories.
+
+This script builds a list of all duplicates by file_id & document_id, and then iterates
+through all ".minscored" files from the filename lookup, creating a new archive for each 
+file in the original containing all documents that were not marked as duplicates during 
+the previous step.
+
+So for each original file, a "\*final.jsonl.zst" files will be output in the same directory.
+
+For example on Linux:
+```bash
+python -m cleaning.dedupe_from_indexes -dir /mnt/data/openwebtext2/scrapes
+```
+
+## Stage 5 - Packaging The Dataset Releases
+
+### Plug And Play Release
+
+We originally did processing by month, but now just use files containing scrapes for the original
+URL files.
+
+Simply tar all the "\*final.jsonl.zst" files.
+
+### Raw Scrapes Release
+
+Similarly just tar all the "scrapes_\*.jsonl.zst" files.
+
+## Stage 6 - Produce Release Stats
+
+If you move the files from each release into their own subdirectory, you can run the "data_analysis/final_stats.py"
+to get total document count and text size for all "jsonl.zst" files in each directory:
+
+For example on Linux:
+```bash
+python -m data_analysis.final_stats -dir /mnt/data/openwebtext2/final
+python -m data_analysis.final_stats -dir /mnt/data/openwebtext2/raw_release
+```
+

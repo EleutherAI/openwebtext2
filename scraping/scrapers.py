@@ -1,6 +1,5 @@
 # Code taken in large part from https://github.com/jcpeterson/openwebtext
 
-
 import time
 import unicodedata
 
@@ -9,7 +8,7 @@ import newspaper
 
 from lxml.html.clean import Cleaner
 from htmlmin import minify
-from filter import should_exclude
+from scraping.filter import should_exclude
 
 
 def find_and_filter_tag(tag, soup):
@@ -64,19 +63,23 @@ def raw_scraper(url, memoize):
     return html, metadata
 
 
-def newspaper_scraper(url, memoize):
+def newspaper_scraper(url, memoize, request_timeout):
     t1 = time.time()
+
     if should_exclude(url):
         # heuristic to make downloading faster
         return None, {
             "url": url,
             "scraper": "newspaper",
-        }
+        }, False
 
     try:
-        article = newspaper.Article(url, fetch_images=False, memoize_articles=memoize)
+        article = newspaper.Article(url, fetch_images=False, memoize_articles=memoize, 
+                                    request_timeout=request_timeout)
         article.download()
         article.parse()
+    except Exception as ex:
+        return None, ex, False
 
         #print(article.__dict__.keys())                
         #dict_keys(['config', 'extractor', 'source_url', 'url', 'title', 'top_img', 'top_image', 'meta_img', 'imgs', 'images', 
@@ -89,13 +92,8 @@ def newspaper_scraper(url, memoize):
         # if article.meta_lang != "en" and article.meta_lang:
         #     print(article.text)
 
-        text = article.text
-        count = len(text.split())
-    except:
-        return None, {
-            "url": url,
-            "scraper": "newspaper",
-        }
+    text = article.text
+    count = len(text.split())
 
     metadata = {
         "title": article.title,
@@ -105,8 +103,7 @@ def newspaper_scraper(url, memoize):
         "elapsed": time.time() - t1,
         "scraper": "newspaper",
     }
-    return text, metadata
-
+    return text, metadata, True
 
 def bs4_scraper(url, memoize):
     t1 = time.time()
