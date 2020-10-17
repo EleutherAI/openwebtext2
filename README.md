@@ -138,14 +138,14 @@ sqlalchemy.url = sqlite:////mnt/data/openwebtext2/submissions.sqlite
 
 This step is performed by "pushshift/pushshift_to_sqlite.py". The script accepts the following arguments:
 
---start_period (-s)
-    Month and Year of first pushshift dump. Default: 6,2005
---finish_period (-f)
-    Month and Year of final pushshift dump. Defaults to current month, ignoring any missing months.
---output_directory (-dir)
-    Base directory that will contain the dumps subdirectory created as part of the process.
---keep_dumps (-kd)
-    If specified the dump won't be deleted after successful processing.
+--start_period (-s)  
+    Month and Year of first pushshift dump. Default: 6,2005  
+--finish_period (-f)  
+    Month and Year of final pushshift dump. Defaults to current month, ignoring any missing months.  
+--output_directory (-dir)  
+    Base directory that will contain the dumps subdirectory created as part of the process.  
+--keep_dumps (-kd)  
+    If specified the dump won't be deleted after successful processing.  
 
 Notice the database location is not specified here, this is always sourced from the alembic.ini file.
 
@@ -165,14 +165,14 @@ This step uses checkpointing, saving a .dbdone file for each dump once processin
 
 This step is performed by "pushshift/generate_urls_from_sqlite.py". The script accepts the following arguments:
 
---start_period (-s)
-    Month and Year of first URLs. Default: 6,2005
---finish_period (-f)
-    Month and Year of final URLs. Defaults to current month.
---output_directory (-dir)
-    Base directory that will contain the urls subdirectory created as part of the process.
---urls_per_file
-    Maximum number of urls per file. Defaults to 100,000.
+--start_period (-s)  
+    Month and Year of first URLs. Default: 6,2005  
+--finish_period (-f)  
+    Month and Year of final URLs. Defaults to current month.  
+--output_directory (-dir)  
+    Base directory that will contain the urls subdirectory created as part of the process.  
+--urls_per_file  
+    Maximum number of urls per file. Defaults to 100,000.  
 
 Notice the database location is not specified here, this is always sourced from the alembic.ini file.
 
@@ -211,13 +211,12 @@ reddit_created_utc: List of submissions created times for the corresponding subm
 
 The script accepts the following arguments:
 
---job_directory (-dir)
-    Base directory containing the urls subdirectory and location where the scrapes subdirectory
-    will be created.
---process_count (-procs)
-    Number of worker processes in the pool. Defaults to 60. Don't go above this on Windows.
---request_timeout (-timeout)
-    Scraping timeout for each URL. Defaults to 30 seconds.
+--job_directory (-dir)  
+    Base directory containing the urls subdirectory and location where the scrapes subdirectory  will be created.  
+--process_count (-procs)  
+    Number of worker processes in the pool. Defaults to 60. Don't go above this on Windows.  
+--request_timeout (-timeout)  
+    Scraping timeout for each URL. Defaults to 30 seconds.  
 
 The program will look for URL files within "job_directory/urls". All scrapes will be stored in "job_directory/scrapes"
 
@@ -247,9 +246,8 @@ The filtered scrapes file will have the original name and path of the scrape fil
 
 The script accepts the following arguments:
 
---scrape_directory (-dir)
-    Directory containing the scrapes. You could use the overall work directory if you 
-    want as we use glob.glob to search recursively.
+--scrape_directory (-dir)  
+    Directory containing the scrapes. You could use the overall work directory if you want as we use glob.glob to search recursively.  
 
 For example on Linux:
 ```bash
@@ -285,11 +283,10 @@ structure in the following format:
 
 The script accepts the following arguments:
 
---scrape_directory (-dir)
-    Directory containing the minscored scrapes. You could use the overall work directory if you 
-    want as we use glob.glob to search recursively.
---process_count (-procs)
-    Number of worker processes in the pool. Defaults to 4.
+--scrape_directory (-dir)  
+    Directory containing the minscored scrapes. You could use the overall work directory if you want as we use glob.glob to search recursively.  
+--process_count (-procs)  
+    Number of worker processes in the pool. Defaults to 4.  
 
 For example on Linux:
 ```bash
@@ -302,11 +299,11 @@ This step is performed by "cleaning/minhash_lsh_batching.py" and splits "minhash
 approximately the desired number of batches.
 
 The script accepts the following arguments:
---directory (-dir)
-    Directory containing the 'minhashes.pkl' file. Batch files and
-    file name lookup will be saved here.
---number_of_batches (-batches)
-    Approximate number of batches to split minhashes into.
+
+--directory (-dir)  
+    Directory containing the 'minhashes.pkl' file. Batch files and file name lookup will be saved here.  
+--number_of_batches (-batches)  
+    Approximate number of batches to split minhashes into.  
 
 The "directory" must contain a 'minhashes.pkl' file created with 'generate_minhashes.py'.
 
@@ -331,11 +328,10 @@ duplicates for each located "batch\*.pkl" file found in the batch_directory.
 
 The script accepts the following arguments:
 
---batch_directory (-dir)
-    Directory containing the "batch\*.pkl" files. "lsh.pkl", duplicate lists and
-    batch checkpoints will be saved here. 
---process_count (-procs)
-    Number of processes in the pool. Defaults to 1.
+--batch_directory (-dir)  
+    Directory containing the "batch\*.pkl" files. "lsh.pkl", duplicate lists and batch checkpoints will be saved here.  
+--process_count (-procs)  
+    Number of processes in the pool. Defaults to 1.  
 
 See the file for more documentation, but importantly: once you run the script you must keep using 
 the same MinHashLSH object pickled to "lsh.pkl" if you want the same basenames for the created Cassandra 
@@ -359,10 +355,8 @@ python -m cleaning.minhash_lsh_dedupe -dir /mnt/data/openwebtext2/scrapes
 
 This step is performed by "cleaning/dedupe_from_indexes.py", which accept the following arguments:
 
---batch_directory (-dir)
-    Directory containing the "\*duplicates.txt" files along with the "file_name_lookup.pkl"
-    created during batch slicing. The "\*final.jsonl.zst" files will be output in their
-    original directories.
+--batch_directory (-dir)  
+    Directory containing the "\*duplicates.txt" files along with the "file_name_lookup.pkl" created during batch slicing. The "\*final.jsonl.zst" files will be output in their original directories.  
 
 This script builds a list of all duplicates by file_id & document_id, and then iterates
 through all ".minscored" files from the filename lookup, creating a new archive for each 
