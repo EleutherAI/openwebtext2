@@ -135,6 +135,8 @@ def minhash_lsh_dedupe_cassandra(batch_minhashes_pickle_path, lsh_pickle_path, t
 
     return True
 
+import time
+
 def main(process_count, batch_directory):
 
     # # Ensure LSH object containing cassandra connection info exists
@@ -145,7 +147,8 @@ def main(process_count, batch_directory):
     #     timed_pickle_dump(lsh, lsh_pickle_path, "lsh")
 
     # Initialize to avoid race conditions?
-    # lsh = get_minhash_lsh_cassandra()
+    lsh = get_minhash_lsh_cassandra()
+    time.sleep(5)
 
     files = glob.glob(os.path.join(batch_directory, "batch*.pkl"), recursive=True)
 
