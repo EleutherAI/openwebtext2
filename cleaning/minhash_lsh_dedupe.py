@@ -144,6 +144,7 @@ def main(process_count, batch_directory):
     #     lsh = get_minhash_lsh_cassandra()
     #     timed_pickle_dump(lsh, lsh_pickle_path, "lsh")
 
+    # Initialize to avoid race conditions?
     lsh = get_minhash_lsh_cassandra()
 
     files = glob.glob(os.path.join(batch_directory, "batch*.pkl"), recursive=True)
