@@ -84,6 +84,11 @@ def main():
     else:
         end_date = datetime.datetime.now()
 
+    logger.info("Running Script - PushShift submission dumps to sqlite")
+    logger.info("Downloading and processing dumps in the following range:")
+    logger.info(start_date.strftime("Start Period: %m-%Y"))
+    logger.info(end_date.strftime("End Period: %m-%Y"))    
+
     dumps_directory = os.path.join(args.output_directory, "dumps")
 
     if os.path.isdir(dumps_directory):
@@ -96,6 +101,7 @@ def main():
 
     os.makedirs(dumps_directory, exist_ok=True)
 
+    logger.info("Building PushShift submission dump file list...")
     url_list = build_file_list(start_date, end_date)        
 
     logger.info("Getting sha256sums")
