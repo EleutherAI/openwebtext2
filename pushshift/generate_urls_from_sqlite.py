@@ -13,13 +13,16 @@ and leaves the filtering to be done by the user if they don't want the plug and 
 Arguments
 ---------
 --start_period (-s)
-    Month and Year of first URLs. Default: 6,2005
+    Month and Year of first URLs. Defaults to None (query all URLs).
 --finish_period (-f)
-    Month and Year of final URLs. Defaults to current month.
+    Month and Year of final URLs. Defaults to None (query all URLs).
 --output_directory (-dir)
     Base directory that will contain the urls subdirectory created as part of the process. 
 --urls_per_file
     Maximum number of urls per file. Defaults to 100,000.
+
+If both start_period and finish_period are blank then we can use a faster query on the reddit_submission
+table.
 """
 
 import datetime
@@ -46,11 +49,19 @@ def generate_urls(url_directory, urls_per_file, start_date, end_date):
     # ORDER BY url
     select_fields = (RedditSubmission.id, RedditSubmission.url, RedditSubmission.score,
                      RedditSubmission.title, RedditSubmission.subreddit, RedditSubmission.created_utc)
-    query = db_session.query(*select_fields) \
-                      .filter(RedditSubmission.created_utc >= start_date) \
-                      .filter(RedditSubmission.created_utc < month_end) \
-                      .order_by(RedditSubmission.url) \
-                      .yield_per(1000)
+
+    if start_date or end_date:
+        assert(start_date and end_date)
+        query = db_session.query(*select_fields) \
+                          .filter(RedditSubmission.created_utc >= start_date) \
+                          .filter(RedditSubmission.created_utc < month_end) \
+                          .order_by(RedditSubmission.url) \
+                          .yield_per(1000)
+    else:
+        query = db_session.query(*select_fields) \
+                          .order_by(RedditSubmission.url) \
+                          .yield_per(1000)
+
     logger.info("Querying sqlite database for submissions")
     logger.info(query)
 
@@ -106,7 +117,7 @@ def generate_urls(url_directory, urls_per_file, start_date, end_date):
 
 parser_description = 'Generate URL files from sqlite database containing URLs and reddit metadata.'
 parser = argparse.ArgumentParser(description=parser_description)
-parser.add_argument("-s", "--start_period", default="6,2005")
+parser.add_argument("-s", "--start_period", default=None)
 parser.add_argument("-f", "--finish_period", default=None)
 parser.add_argument("-dir", "--output_directory", default="")
 parser.add_argument("--urls_per_file", type=int, default=100000)
@@ -115,14 +126,20 @@ parser.add_argument("--urls_per_file", type=int, default=100000)
 if __name__ == '__main__':
     args = parser.parse_args()
 
-    start_month, start_year = tuple(map(int,args.start_period.split(",")))
-    start_date = datetime.datetime(start_year, start_month, 1) 
+    # If both none we can just query all and use the index on url field
+    # Otherwise we use the index on created_utc and have to do a costly url sort
+    if args.start_period or args.finish_period:
+        if args.start_period:
+            start_month, start_year = tuple(map(int,args.start_period.split(",")))
+            start_date = datetime.datetime(start_year, start_month, 1)
+        else:
+            start_date = datetime.datetime(2005, 6, 1)
 
-    if args.finish_period:
-        finish_month, finish_year = tuple(map(int,args.finish_period.split(",")))
-        end_date = datetime.datetime(finish_year, finish_month, 1) 
-    else:
-        end_date = datetime.datetime.now()
+        if args.finish_period:
+            finish_month, finish_year = tuple(map(int,args.finish_period.split(",")))
+            end_date = datetime.datetime(finish_year, finish_month, 1) 
+        else:
+            end_date = datetime.datetime.now()
 
     urls_directory = os.path.join(args.output_directory, "urls")
 

@@ -43,10 +43,10 @@ Each batch file will have a corresponding "*_duplicates.txt" when done.
 Arguments
 ------
 --batch_directory (-dir)
-    Directory containing the "batch*.pkl" files. "lsh.pkl", duplicate lists and
+    Directory containing the "batch*.pkl" files. Duplicate lists and
     batch checkpoints will be saved here. 
 --process_count (-procs)
-    Number of processes in the pool. Defaults to 1.
+    Number of processes in the pool. Defaults to 4.
 """
 
 import os
@@ -171,7 +171,7 @@ def main(process_count, batch_directory):
 
 parser = argparse.ArgumentParser(description='Minhash LSH dedupe with cassandra backend.')
 parser.add_argument("-dir", "--batch_directory", default="")
-parser.add_argument("-procs", "--process_count", type=int, default=1)
+parser.add_argument("-procs", "--process_count", type=int, default=4)
 
 if __name__ == '__main__':
     logfile_path = "minhash_lsh_dedupe.log"
