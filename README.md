@@ -19,4 +19,3 @@ For further information please visit our [documentation](https://openwebtext2.re
 [Colaboratory](https://colab.research.google.com/) VMs helped us with about 10% of our overall scraping. <br />
 [The Eye](http://the-eye.eu/) host our processed datasets.<br />
 [Read The Docs](https://readthedocs.org/) host our documentation.<br />
-
