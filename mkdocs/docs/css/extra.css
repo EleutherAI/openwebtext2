@@ -1,0 +1,33 @@
+table {
+    margin-bottom: 16px;
+}
+
+table th {
+    padding: 8px;
+}
+
+table td {
+    padding: 8px;
+}
+
+.rst-content table code {
+    white-space: nowrap;
+}
+
+p {
+    margin-bottom: 16px;
+}
+
+.download-button
+{
+
+}
+
+.download-button svg {
+    margin-left: 4px;
+    border: none;
+}
+
+.darken {
+   filter: brightness(75%);
+} 
