@@ -4,9 +4,9 @@ OpenWebText2 is an enhanced version of the original OpenWebTextCorpus covering a
 
 In case you haven't heard of WebText, the core principle is extracting URLs from reddit submissions, scraping the URLs, then performing filtering & deduplication. See [Background](/Background) for more information.
 
-## Download the Data
+<hr />
 
-### Plug and Play Version
+## Download Plug and Play Version
 This version has already been cleaned for you:
 
 - Deduplicated by URL
@@ -15,7 +15,8 @@ This version has already been cleaned for you:
 
 **Stats**<br/>
 17,103,059 documents<br/>
-65.86 GB uncompressed text
+65.86 GB uncompressed text<br/>
+28 GB compressed including text and metadata
 
 
 <a href="https://the-eye.eu/public/AI/pile_preliminary_components/openwebtext2.jsonl.zst.tar">
@@ -27,13 +28,28 @@ This version has already been cleaned for you:
     </svg>
 </button>
 </a>
-28gb compressed including text and metadata
 
-### Raw Scrapes
+<hr />
+
+## Download Raw Scrapes Version
 Only deduplicated by URL.
 
-Contains 69,547,149 documents for a total of 193.89gb uncompressed text.  
-openwebtext2_raw.tar (79gb compressed including text and metadata) **currently uploading**
+**Stats**<br/>
+69,547,149 documents<br/>
+193.89gb uncompressed text.<br/>
+79gb compressed including text and metadata
+
+<a href="https://eaidata.bmk.sh/data/openwebtext2_raw.tar">
+<button type="button" class="btn btn-outline-primary download-button">
+    Download
+    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path>
+        <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path>
+    </svg>
+</button>
+</a>
+
+<hr />
 
 ## Using The Data
 

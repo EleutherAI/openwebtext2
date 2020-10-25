@@ -18,6 +18,16 @@ p {
     margin-bottom: 16px;
 }
 
+.download-button
+{
+
+}
+
 .download-button svg {
     margin-left: 4px;
+    border: none;
 }
+
+.darken {
+   filter: brightness(75%);
+} 
