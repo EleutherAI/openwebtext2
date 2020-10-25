@@ -16,6 +16,6 @@ The plug and play version of OpenWebText2 contains:
 [The Eye](http://the-eye.eu/) host our processed datasets.<br />
 [Read The Docs](https://readthedocs.org/) host our documentation.<br />
 
-## Download / Replicate The Dataset / Full Documentation
+## Documentation
 
 For further information please visit our [documentation](https://openwebtext2.readthedocs.io/en/latest/).
