@@ -145,3 +145,4 @@ data_analysis/score_over_time.py
 data_analysis/score_over_time_scrapes.py
 test_db.py
 cleaning/aggregate_archives_by_month.py
+mkdocs/site/*

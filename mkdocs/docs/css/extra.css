@@ -1,28 +1,14 @@
-table td {
-    padding: 8px;
+table {
+    margin-bottom: 16px;
 }
 
 table th {
     padding: 8px;
 }
 
-table {
-    margin-bottom: 16px;
+table td {
+    padding: 8px;
 }
-
-/*.argument {
-    display: flex;
-    align-items: flex-start;
-}
-
-.argument code {
-    flex-shrink: 0;
-}
-
-.argument p {
-    margin-left: px;
-}
-*/
 
 .rst-content table code {
     white-space: nowrap;
@@ -30,4 +16,8 @@ table {
 
 p {
     margin-bottom: 16px;
+}
+
+.download-button svg {
+    margin-left: 4px;
 }
