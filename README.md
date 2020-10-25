@@ -8,6 +8,10 @@ The plug and play version of OpenWebText2 contains:
 - 17,103,059 documents
 - 65.86GB uncompressed text
 
+## Download Dataset / Documentation
+
+For further information please visit our [documentation](https://openwebtext2.readthedocs.io/en/latest/).
+
 ## Acknowledgements
 [researcher2](https://github.com/researcher2) Wrote much of this code, with inspiration and some straight copying of the scraping code found [here](https://github.com/yet-another-account/openwebtext/).<br/>
 [sdtblck](https://github.com/sdtblck/) kindly put together the Colab notebook, and performed a chunk of the scraping. <br/>
@@ -16,6 +20,3 @@ The plug and play version of OpenWebText2 contains:
 [The Eye](http://the-eye.eu/) host our processed datasets.<br />
 [Read The Docs](https://readthedocs.org/) host our documentation.<br />
 
-## Documentation
-
-For further information please visit our [documentation](https://openwebtext2.readthedocs.io/en/latest/).
