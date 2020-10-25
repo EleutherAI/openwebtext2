@@ -12,7 +12,7 @@ def json_serial(obj):
         return obj.isoformat()
     raise TypeError ("Type %s not serializable" % type(obj))
 
-# Modified version of lm_dataformat for single file.
+# Modified version of lm_dataformat Archive for single file.
 class Archive:
     def __init__(self, file_path, compression_level=3):
         self.file_path = file_path
@@ -31,33 +31,7 @@ class Archive:
         self.fh.flush()
         self.fh.close()
 
-# Doesn't work
-# class ArchiveAppend:
-#     def __init__(self, file_path, compression_level=3):
-#         self.file_path = file_path
-#         dir_name = os.path.dirname(file_path)
-#         if dir_name:
-#             os.makedirs(dir_name, exist_ok=True)
-#         if os.path.exists(self.file_path):
-#             self.fh = open(self.file_path, 'r+b')
-#             EOF = 2
-#             self.fh.seek(0, EOF)
-#         else:
-#             self.fh = open(self.file_path, "wb")
-
-#         self.fh
-#         self.cctx = zstandard.ZstdCompressor(level=compression_level)
-#         self.compressor = self.cctx.stream_writer(self.fh)        
-    
-#     def add_data(self, data, meta={}):
-#         self.compressor.write(json.dumps({'text': data, 'meta': meta}, default=json_serial).encode('UTF-8') + b'\n')
-    
-#     def commit(self):
-#         self.compressor.flush(zstandard.FLUSH_FRAME)        
-#         self.fh.flush()
-#         self.fh.close()
-
-# Modified version of lm_dataformat with self.fh set, allowing peeking for tqdm.
+# Modified version of lm_dataformat Reader with self.fh set, allowing peeking for tqdm.
 class Reader:
     def __init__(self):
         pass

@@ -1,0 +1,9 @@
+site_name: OpenWebText2
+theme: readthedocs
+docs_dir: 'docs'
+nav:
+  - Welcome: index.md
+  - WebText Background: background.md
+  - Dataset Replication: replication.md
+extra_css:
+    - css/extra.css
