@@ -34,7 +34,6 @@ import glob
 import json
 import argparse
 
-import tldextract
 import tqdm
 from tqdm_multiprocess import TqdmMultiProcessPool
 
@@ -59,9 +58,6 @@ def download(url_entry, request_timeout, scraper,
         return (text, meta, False)
 
     # Add extra meta
-    ext = tldextract.extract(url)
-    domain = '.'.join([x for x in ext if x])
-    meta["domain"] = domain
     meta["reddit_id"] = reddit_meta["id"]
     meta["subreddit"] = reddit_meta["subreddit"]
     meta["reddit_score"] = reddit_meta["score"]
@@ -70,19 +66,30 @@ def download(url_entry, request_timeout, scraper,
 
     if global_tqdm:
         global_tqdm.update()
+
     return (text, meta, success)
 
 def scrape_urls(urls_directory, scrapes_directory, process_count, request_timeout):
 
-    # Get Total URL count (saved during sqlite extraction)
+    url_files = glob.glob(os.path.join(urls_directory, "urls_*.jsonl.zst"))
+
+    # Get Total URL count
     url_count_path = os.path.join(urls_directory, "url_count.json")
-    total_url_count = json.load(open(url_count_path, "r"))
+    if os.path.exists(url_count_path):
+        total_url_count = json.load(open(url_count_path, "r"))
+    else:
+        logger.info("Getting total URL count...")
+        total_url_count = 0
+        for url_file_path in tqdm.tqdm(url_files, dynamic_ncols=True):
+            reader = Reader()
+            url_data = []
+            for url in reader.read_jsonl(url_file_path, get_meta=False):
+                total_url_count += 1
+        json.dump(total_url_count, open(url_count_path, "w"))
 
     # overall progress bar
     progress = tqdm.tqdm(total=total_url_count, dynamic_ncols=True)
     progress.set_description("Total URLs")
-
-    url_files = glob.glob(os.path.join(urls_directory, "urls_*.jsonl.zst"))
 
     for url_file_path in url_files:
         # Skip if previously done
@@ -91,6 +98,7 @@ def scrape_urls(urls_directory, scrapes_directory, process_count, request_timeou
             batch_url_count = json.load(open(done_file_path, "r"))
             progress.update(batch_url_count)
             logger.info(f"'{os.path.basename(url_file_path)}' already scraped, skipping.")
+            continue
 
         logger.info(f"Scraping URLs from '{os.path.basename(url_file_path)}'.")
     
@@ -101,20 +109,21 @@ def scrape_urls(urls_directory, scrapes_directory, process_count, request_timeou
 
         timer = Timer().start()
 
-        batch_progress = tqdm.tqdm(total=len(url_data), dynamic_ncols=True)
-        batch_progress.set_description(f"{os.path.basename(url_file_path)}")
-
         # Download and Process With Pool
-        pool = TqdmMultiProcessPool()
+        pool = TqdmMultiProcessPool(process_count)
         tasks = []
         for url_entry in url_data:
             arguments = (url_entry, request_timeout, newspaper_scraper, False)
             task = (download, arguments)
             tasks.append(task)
 
+        # tqdm-multiprocess doesn't support multiple global tqdms, use on_done as well
         on_done = lambda _ : progress.update()
         on_error = lambda _ : None
-        results = pool.map(process_count, batch_progress, tasks, on_error, on_done)
+
+        with tqdm.tqdm(total=len(url_data), dynamic_ncols=True) as batch_progress:
+            batch_progress.set_description(f"{os.path.basename(url_file_path)}")
+            results = pool.map(batch_progress, tasks, on_error, on_done)
 
         logger.info("Archiving chunk with lm_dataformat...")
         # urls_*.jsonl.zst -> scrapes_*.jsonl.zst
@@ -132,9 +141,6 @@ def scrape_urls(urls_directory, scrapes_directory, process_count, request_timeou
         error_percentage = batch_error_count / len(url_data) * 100
         logger.info(f"Errors: {batch_error_count} / {len(url_data)} ({error_percentage:0.2f}%)")
         logger.info(f"Batch time: {timer.stop():0.2f} seconds")
-
-        progress.update(len(url_data))
-        batch_progress.close()
 
         json.dump(len(url_data), open(done_file_path, "w"))
 

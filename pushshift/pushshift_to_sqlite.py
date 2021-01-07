@@ -26,12 +26,13 @@ import os
 import argparse
 import sys
 
-from .download_pushshift_dumps import build_file_list, get_sha256sums, download_file
-from .process_dump_files_sqlite import process_dump_file
-from .models import get_db_session
-
+from best_download import download_file
 import cutie
 import tqdm
+
+from .download_pushshift_dumps import build_file_list, get_sha256sums
+from .process_dump_files_sqlite import process_dump_file
+from .models import get_db_session
 
 import logging
 from utils.logger import setup_logger_tqdm
@@ -46,9 +47,10 @@ def reddit_processing(url, sha256sums, dumps_directory, keep_dumps):
     if os.path.exists(db_done_file):
         return True
 
-    result = download_file(url, dump_file_path, sha256sums.get(base_name), tqdm.tqdm)
-    if not result:
-        logger.info("Download failed, skipping processing.")
+    try:
+        download_file(url, dump_file_path, sha256sums.get(base_name))
+    except Exception as ex:
+        logger.info(f"Download failed {ex}, skipping processing.")
         return False
 
     db_session = get_db_session()
@@ -84,6 +86,11 @@ def main():
     else:
         end_date = datetime.datetime.now()
 
+    logger.info("Running Script - PushShift submission dumps to sqlite")
+    logger.info("Downloading and processing dumps in the following range:")
+    logger.info(start_date.strftime("Start Period: %m-%Y"))
+    logger.info(end_date.strftime("End Period: %m-%Y"))    
+
     dumps_directory = os.path.join(args.output_directory, "dumps")
 
     if os.path.isdir(dumps_directory):
@@ -96,6 +103,7 @@ def main():
 
     os.makedirs(dumps_directory, exist_ok=True)
 
+    logger.info("Building PushShift submission dump file list...")
     url_list = build_file_list(start_date, end_date)        
 
     logger.info("Getting sha256sums")

@@ -17,7 +17,7 @@ base = declarative_base()
 class RedditSubmission(base):
     __tablename__ = "reddit_submission"
     id = Column(Integer, primary_key=True) # Converted from Base36
-    url = Column(Text)
+    url = Column(Text, index=True)
     score = Column(Integer)
     title = Column(Text)
     subreddit = Column(Text)

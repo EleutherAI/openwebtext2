@@ -106,27 +106,36 @@ python -m pushshift.pushshift_to_sqlite -s 1,2006 -f 12,2006 -dir /mnt/data/open
 
 This step uses checkpointing, saving a .dbdone file for each dump once processing is complete. So if you need to stop and come back later you can.
 
+### Processing the PushShift Dumps With jq and sort instead
+
+TO DO.
+
+
 ### Extract Unique URLs with Reddit Metadata
 
-This step is performed by *pushshift/generate_urls_from_sqlite.py*.
+This step is performed by *pushshift/generate_urls.py*. Currently only supports sqlite mode, working on the json->sorted tsv version now.
 
 | Script Argument      | Description |
 | -----------: | ----------- |
 | `--start_period (-s)` | Month and Year of first URLs. Defaults to None (query all URLs).     |
 | `--finish_period (-f)` | Month and Year of final URLs. Defaults to None (query all URLs). |
 | `--output_directory (-dir)` | Will contain the urls subdirectory created as part of the process.    | 
-| `--urls_per_file` | Maximum number of urls per file. Defaults to 100,000.    | 
+| `--urls_per_file` | Maximum number of urls per file. Defaults to 100,000.    |
+| `--min_score (-score)` | Minimum aggregate submissions score to include url. Defaults to 3.   |
+| `--data_source (-source)` | Where to find sorted URLs: "db" or "tsv". tsv doesn't support date ranges. Defaults "to db".    |
+
+
 
 Notice the database location is not specified here, this is always sourced from the alembic.ini file.
 
 For example on Linux, to extract all urls 
 ```bash
-python -m pushshift.generate_urls_from_sqlite -dir /mnt/data/openwebtext2
+python -m pushshift.generate_urls -dir /mnt/data/openwebtext2
 ```
 
 Test run on 2006 only:
 ```bash
-python -m pushshift.generate_urls_from_sqlite -s 1,2006 -f 12,2006 -dir /mnt/data/openwebtext2
+python -m pushshift.generate_urls -s 1,2006 -f 12,2006 -dir /mnt/data/openwebtext2
 ```
 
 ## Stage 2 - Scraping From Sourced URLs
