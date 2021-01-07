@@ -1,6 +1,9 @@
 import tldextract
 import re
 
+import logging
+logger = logging.getLogger("filelock")
+logger.setLevel(logging.WARNING)
 
 # https://stackoverflow.com/questions/7160737/python-how-to-validate-a-url-in-python-malformed-or-not
 url_regex = re.compile(
