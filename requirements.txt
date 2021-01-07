@@ -16,5 +16,6 @@ tqdm-multiprocess
 base36
 alembic
 cassandra-driver
+best-download
 
 mkdocs

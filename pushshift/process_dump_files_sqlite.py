@@ -48,7 +48,7 @@ def process_reddit_post(post):
     reddit_submission.id = base36.loads(post["id"])
     reddit_submission.subreddit = post.get("subreddit")
     reddit_submission.title = post.get("title")
-    reddit_submission.score = post.get("score")
+    reddit_submission.score = post.get("score", 0)
     reddit_submission.created_utc = datetime.datetime.fromtimestamp(int(post["created_utc"]))
     reddit_submission.url = url   
 
