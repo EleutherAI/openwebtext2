@@ -81,3 +81,13 @@ print(f"Total Uncompressed Text Size: {(total_text_size / billion):.2f} GB")
 
 Alternatively checkout <a href="https://github.com/EleutherAI/The-Pile/" target="_blank">The-Pile</a>, which acts as an aggregator/dataloader for multiple text datasets. It allows you to configure your total data size requirement, along with the desired weighting for each subset. Once configured, you get a randomized stream of documents, allowing easy feeding to your language model.
 
+## Cite as
+
+<pre style="white-space: pre-wrap;">
+@article{pile,
+    title={The {P}ile: An 800GB Dataset of Diverse Text for Language Modeling},
+    author={Gao, Leo and Biderman, Stella and Black, Sid and Golding, Laurence and Hoppe, Travis and Foster, Charles and Phang, Jason and He, Horace and Thite, Anish and Nabeshima, Noa and Presser, Shawn and Leahy, Connor},
+    journal={arXiv preprint arXiv:2101.00027},
+    year={2020}
+}
+</pre>
