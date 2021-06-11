@@ -1,6 +1,6 @@
 # OpenWebText2
 
-This project is part of Eleuther AI's quest to create a massive repository of high quality text data for training language models.
+This project is part of EleutherAI's quest to create a massive repository of high quality text data for training language models.
 
 Very briefly, OpenWebText2 is a large filtered dataset of text documents scraped from URL found on Reddit submisisons.
 
