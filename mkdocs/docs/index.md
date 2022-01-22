@@ -39,7 +39,7 @@ Only deduplicated by URL.
 193.89gb uncompressed text.<br/>
 79gb compressed including text and metadata
 
-<a href="https://eaidata.bmk.sh/data/openwebtext2_raw.tar">
+<a href="http://eaidata.bmk.sh/data/openwebtext2_raw.tar">
 <button type="button" class="btn btn-outline-primary download-button">
     Download
     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
