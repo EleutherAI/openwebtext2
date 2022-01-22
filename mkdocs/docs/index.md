@@ -19,7 +19,7 @@ This version has already been cleaned for you:
 28 GB compressed including text and metadata
 
 
-<a href="https://the-eye.eu/public/AI/pile_preliminary_components/openwebtext2.jsonl.zst.tar">
+<a href="https://mystic.the-eye.eu/public/AI/pile_preliminary_components/openwebtext2.jsonl.zst.tar">
 <button type="button" class="btn btn-outline-primary download-button">
     Download
     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-download" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
