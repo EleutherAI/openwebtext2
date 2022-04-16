@@ -43,10 +43,10 @@ Each batch file will have a corresponding "*_duplicates.txt" when done.
 Arguments
 ------
 --batch_directory (-dir)
-    Directory containing the "batch*.pkl" files. "lsh.pkl", duplicate lists and
+    Directory containing the "batch*.pkl" files. Duplicate lists and
     batch checkpoints will be saved here. 
 --process_count (-procs)
-    Number of processes in the pool. Defaults to 1.
+    Number of processes in the pool. Defaults to 4.
 """
 
 import os
@@ -69,6 +69,7 @@ def get_minhash_lsh_cassandra():
     lsh = MinHashLSH(
         threshold=0.5, num_perm=10, storage_config={
             'type': 'cassandra',
+            'basename': b'owt2',
             'cassandra': {
                 'seeds': ['127.0.0.1'],
                 'keyspace': 'minhash_lsh_keyspace',
@@ -88,7 +89,7 @@ def minhash_lsh_dedupe_cassandra(batch_minhashes_pickle_path, lsh_pickle_path, t
     batch_minhashes = timed_pickle_load(batch_minhashes_pickle_path, "batch minhashes")
 
     # For some reason this will freeze when loading on the first run. 
-    lsh = timed_pickle_load(lsh_pickle_path, "lsh")    
+    lsh = get_minhash_lsh_cassandra()
 
     checkpoint_file = batch_minhashes_pickle_path.replace(".pkl","_ckpt.pkl")
     if os.path.exists(checkpoint_file):
@@ -134,14 +135,20 @@ def minhash_lsh_dedupe_cassandra(batch_minhashes_pickle_path, lsh_pickle_path, t
 
     return True
 
+import time
+
 def main(process_count, batch_directory):
 
-    # Ensure LSH object containing cassandra connection info exists
-    lsh_pickle_path = os.path.join(batch_directory, "lsh.pkl")
-    if not os.path.exists(lsh_pickle_path):
-        logger.info("Getting cassandra minhash lsh")
-        lsh = get_minhash_lsh_cassandra()
-        timed_pickle_dump(lsh, lsh_pickle_path, "lsh")
+    # # Ensure LSH object containing cassandra connection info exists
+    # lsh_pickle_path = os.path.join(batch_directory, "lsh.pkl")
+    # if not os.path.exists(lsh_pickle_path):
+    #     logger.info("Getting cassandra minhash lsh")
+    #     lsh = get_minhash_lsh_cassandra()
+    #     timed_pickle_dump(lsh, lsh_pickle_path, "lsh")
+
+    # Initialize to avoid race conditions?
+    # lsh = get_minhash_lsh_cassandra()
+    # time.sleep(5)
 
     files = glob.glob(os.path.join(batch_directory, "batch*.pkl"), recursive=True)
 
@@ -152,7 +159,7 @@ def main(process_count, batch_directory):
     total_documents = pickle.load(open(document_count_path,"rb"))
 
     for batch_file in files:
-        arguments = (batch_file, lsh_pickle_path)
+        arguments = (batch_file, None)
         task = (minhash_lsh_dedupe_cassandra, arguments)
         tasks.append(task)
 
@@ -164,7 +171,7 @@ def main(process_count, batch_directory):
 
 parser = argparse.ArgumentParser(description='Minhash LSH dedupe with cassandra backend.')
 parser.add_argument("-dir", "--batch_directory", default="")
-parser.add_argument("-procs", "--process_count", type=int, default=1)
+parser.add_argument("-procs", "--process_count", type=int, default=4)
 
 if __name__ == '__main__':
     logfile_path = "minhash_lsh_dedupe.log"
