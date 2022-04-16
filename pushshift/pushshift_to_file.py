@@ -3,14 +3,12 @@ import os
 import argparse
 import sys
 import subprocess
-import csv
-import json
 
-from .download_pushshift_dumps import build_file_list, get_sha256sums, download_file
-from utils.archiver import Archive
+from best_download import download_file
+
+from .download_pushshift_dumps import build_file_list, get_sha256sums
 
 import cutie
-import tqdm
 
 import logging
 from utils.logger import setup_logger_tqdm
@@ -20,21 +18,20 @@ def build_tsv(url, sha256sums, output_directory, dumps_directory, keep_dumps):
 
     base_name = url.split('/')[-1]
     dump_file_path = os.path.join(dumps_directory, base_name)
-    db_done_file = dump_file_path + ".dbdone"
+    db_done_file = dump_file_path + ".jsondone"
 
     if os.path.exists(db_done_file):
         return True
 
-    result = download_file(url, dump_file_path, sha256sums.get(base_name), tqdm.tqdm)
-    if not result:
-        logger.info("Download failed, skipping processing.")
+    try:
+        download_file(url, dump_file_path, sha256sums.get(base_name))
+    except Exception as ex:
+        logger.info(f"Download failed {ex}, skipping processing.")
         return False
 
     temp_json = os.path.join(output_directory, "urls.dat")
 
     extension = dump_file_path.split(".")[-1]
-
-    logger.info("Processing Dump File...")
 
     if extension == "zst":
         command = f'zstdcat {dump_file_path} | jq -c -r "[.url, .id, .subreddit, .title, .score, .created_utc] | @tsv" >> {temp_json}'
@@ -53,56 +50,6 @@ def build_tsv(url, sha256sums, output_directory, dumps_directory, keep_dumps):
         os.remove(dump_file_path)
 
     return True
-
-def generate_urls(sorted_urls_file, urls_directory, urls_per_file):
-
-    url_batch = 0
-    url_file_path = os.path.join(urls_directory, f"urls_{url_batch}.jsonl.zst")
-    archiver = Archive(url_file_path)
-    current_url = ""
-    current_meta = {}
-
-    total_url_count = 0
-    url_count = 0
-    with open(sorted_urls_file, "r") as fh:
-        reader = csv.reader(fh, delimiter='\t')
-        for row in reader:
-            url, submission_id, subreddit, title, score, created_utc = tuple(row)
-
-            if url != current_url:
-                if current_url:
-                    archiver.add_data(current_url, current_meta)
-
-                url_count += 1
-                total_url_count += 1
-                current_url = url
-                current_meta = {}
-                current_meta["id"] = []
-                current_meta["score"] = []
-                current_meta["title"] = []
-                current_meta["subreddit"] = []
-                current_meta["created_utc"] = []
-
-                if url_count == urls_per_file:
-                    archiver.commit()
-                    url_batch += 1
-                    url_file_path = os.path.join(urls_directory, f"urls_{url_batch}.jsonl.zst")
-                    archiver = Archive(url_file_path)
-                    url_count = 0
-
-            current_meta["id"].append(submission_id)
-            current_meta["score"].append(score)
-            current_meta["title"].append(title)
-            current_meta["subreddit"].append(subreddit)
-            current_meta["created_utc"].append(created_utc)
-
-    if url_count > 0:
-        archiver.add_data(current_url, current_meta)
-        total_url_count += 1        
-        archiver.commit()
-
-    url_count_path = os.path.join(urls_directory, "url_count.json")
-    json.dump(total_url_count, open(url_count_path, "w"))
 
 parser = argparse.ArgumentParser(description='Download PushShift submission dumps, extra urls')
 parser.add_argument("-s", "--start_period", default="6,2005")
@@ -150,7 +97,7 @@ def main():
     sha256sums = get_sha256sums()
 
     # Download and Process
-    logger.info("Commencing download and processing into sqlite.")
+    logger.info("Commencing download and processing into tsv")
     results = []
     for url in url_list:
         result = build_tsv(url, sha256sums, args.output_directory, dumps_directory, 

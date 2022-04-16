@@ -72,7 +72,7 @@ parser.add_argument("-kd", "--keep_dumps", action='store_true')
 
 # First available file: https://files.pushshift.io/reddit/submissions/RS_v2_2005-06.xz
 def main():
-    logfile_path = "download_pushshift_dumps.log"
+    logfile_path = "pushshift_to_sqlite.log"
     setup_logger_tqdm(logfile_path) # Logger will write messages using tqdm.write
 
     args = parser.parse_args()

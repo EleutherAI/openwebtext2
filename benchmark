@@ -1,0 +1,12 @@
+Benchmark:
+
+SQLite
+------
+url and date indexed: 24 hours
+url indexed: 24 hours
+no indexes: 17 hours
+
+Json:
+zstdcat | jq: 15:11
+sort: 2:39
+generate urls: 

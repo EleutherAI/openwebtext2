@@ -36,6 +36,7 @@ import os
 import json
 from functools import partial
 import sys
+import csv
 
 from utils.archiver import Archive
 from .models import RedditSubmission, get_db_session
@@ -70,8 +71,17 @@ def get_from_db(start_date, end_date):
     logger.info(query)
     return query
 
-def get_from_tsv():
-    pass
+def get_from_tsv(sorted_urls_file):
+    csv.field_size_limit(sys.maxsize)
+    with open(sorted_urls_file, "r") as fh:
+        reader = csv.reader(fh, delimiter='\t')
+        for row in reader:
+            try:
+                url, submission_id, subreddit, title, score, created_utc = tuple(row)
+                yield submission_id, url, score, title, subreddit, created_utc
+            except Exception as ex:
+                logger.info(row)
+                raise(ex)
 
 
 def generate_urls(url_directory, urls_per_file, min_score, source):
@@ -119,7 +129,10 @@ def generate_urls(url_directory, urls_per_file, min_score, source):
             current_meta["created_utc"] = []
 
         current_meta["id"].append(submission_id)
-        current_meta["score"].append(score)
+        try:
+            current_meta["score"].append(int(score))
+        except:
+            current_meta["score"].append(0)
         current_meta["title"].append(title)
         current_meta["subreddit"].append(subreddit)
         current_meta["created_utc"].append(created_utc)
@@ -177,7 +190,8 @@ if __name__ == '__main__':
     if args.data_source == "db":
         source = partial(get_from_db, start_date, end_date)
     elif args.data_source == "tsv":
-        source = get_from_tsv
+        sorted_json = os.path.join(args.output_directory, "urls_sorted.dat")
+        source = partial(get_from_tsv, sorted_json)
     else:
         logger.info(f"Invalid source {args.data_source}")
         sys.exit(-1)
