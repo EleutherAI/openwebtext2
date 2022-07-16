@@ -29,7 +29,7 @@ def get_archive_stream_reader(file_path):
     extension = file_path.split(".")[-1]
 
     if extension == "zst":
-        return ArchiveStreamReader(file_path, zstd.ZstdDecompressor().stream_reader)
+        return ArchiveStreamReader(file_path, zstd.ZstdDecompressor(max_window_size=2147483648).stream_reader)
     elif extension == "bz2":
         return ArchiveStreamReader(file_path, bz2.BZ2File)
     elif extension == "xz":
