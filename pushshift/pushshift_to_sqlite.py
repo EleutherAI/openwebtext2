@@ -48,7 +48,7 @@ def reddit_processing(url, sha256sums, dumps_directory, keep_dumps):
         return True
 
     try:
-        download_file(url, dump_file_path, sha256sums.get(base_name))
+        download_file(url, sha256sums.get(base_name), dump_file_path)
     except Exception as ex:
         logger.info(f"Download failed {ex}, skipping processing.")
         return False
